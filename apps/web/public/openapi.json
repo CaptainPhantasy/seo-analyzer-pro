@@ -1,0 +1,113 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SEO & GEO Analyzer Pro API",
+    "description": "Enterprise-grade API for analyzing websites for Search Engine Optimization (SEO) and Generative Engine Optimization (GEO). Designed for autonomous LLM agents and programmatic access.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Legacy AI / Floyd's Labs",
+      "url": "https://www.legacyai.space"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.seoanalyzer.pro/v1",
+      "description": "Production API Server"
+    },
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Local Development Server"
+    }
+  ],
+  "paths": {
+    "/analyze": {
+      "post": {
+        "summary": "Analyze a website URL",
+        "description": "Fetches the target URL and performs a comprehensive SEO, GEO, CORE, E-E-A-T, and Technical analysis. Returns detailed scores, metrics, and prioritized action items.",
+        "operationId": "analyzeWebsite",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["url"],
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The fully qualified URL of the website to analyze (e.g., https://example.com)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful analysis",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisReport"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid URL provided"
+          },
+          "500": {
+            "description": "Internal Server Error - Failed to fetch or analyze the website"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnalysisReport": {
+        "type": "object",
+        "properties": {
+          "url": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "overallScore": { "type": "integer", "minimum": 0, "maximum": 100 },
+          "geoScore": { "type": "integer", "minimum": 0, "maximum": 100 },
+          "seoScore": { "type": "integer", "minimum": 0, "maximum": 100 },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "category": { "type": "string" },
+                "score": { "type": "integer" },
+                "maxScore": { "type": "integer" }
+              }
+            }
+          },
+          "actionItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ActionItem"
+            }
+          },
+          "llmPrompts": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "ActionItem": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "priority": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+          "category": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "llmInstruction": { "type": "string" }
+        }
+      }
+    }
+  }
+}

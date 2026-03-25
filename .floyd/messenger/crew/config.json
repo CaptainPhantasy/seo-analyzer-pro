@@ -1,0 +1,8 @@
+{
+  "projectName": "SEO Analyzer Pro",
+  "version": "1.0.0",
+  "creator": "Legacy AI / Floyd's Labs",
+  "websites": ["www.LegacyAI.space", "www.FloydsLabs.com"],
+  "concurrency": 4,
+  "agents": ["scout", "builder", "documenter"]
+}

@@ -1,0 +1,2668 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SEO & GEO Analyzer Pro — Enterprise-grade website analysis for search engine and AI engine optimization. Audit on-page SEO, GEO readiness, E-E-A-T signals, accessibility, social SEO, and technical health.">
+    <meta name="color-scheme" content="light dark">
+    <title>SEO & GEO Analyzer Pro | Legacy AI / Floyd's Labs</title>
+    <!--
+    SEO & GEO Analyzer Pro
+    Copyright (c) 2026 Legacy AI / Floyd's Labs
+    www.LegacyAI.space | www.FloydsLabs.com
+
+    Enterprise production release — inline CSS/JS, no build step.
+    WCAG 2.1 AA compliant. Dark/light mode. Full PDF reporting.
+    -->
+    <style>
+        /* ========================================================================
+           DESIGN TOKENS — CSS Custom Properties
+           ======================================================================== */
+        :root {
+            /* Brand */
+            --brand-primary: #4f46e5;
+            --brand-primary-hover: #4338ca;
+            --brand-secondary: #7c3aed;
+            --brand-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+
+            /* Surfaces */
+            --bg-body: #f3f4f6;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f9fafb;
+            --bg-input: #ffffff;
+            --bg-code: #1f2937;
+            --bg-overlay: rgba(0, 0, 0, 0.5);
+
+            /* Text */
+            --text-primary: #111827;
+            --text-secondary: #374151;
+            --text-muted: #6b7280;
+            --text-inverse: #ffffff;
+            --text-link: #4f46e5;
+
+            /* Borders */
+            --border-color: #d1d5db;
+            --border-light: #e5e7eb;
+            --border-focus: #4f46e5;
+
+            /* Semantic */
+            --color-success: #059669;
+            --color-success-bg: #ecfdf5;
+            --color-success-border: #a7f3d0;
+            --color-warning: #d97706;
+            --color-warning-bg: #fffbeb;
+            --color-warning-border: #fde68a;
+            --color-error: #dc2626;
+            --color-error-bg: #fef2f2;
+            --color-error-border: #fecaca;
+            --color-info: #2563eb;
+            --color-info-bg: #eff6ff;
+            --color-info-border: #bfdbfe;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+            /* Focus ring */
+            --focus-ring: 0 0 0 3px rgba(79, 70, 229, 0.4);
+
+            /* Spacing */
+            --container-max: 1200px;
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+
+            /* Transitions */
+            --transition-fast: 150ms ease;
+            --transition-base: 200ms ease;
+            --transition-slow: 300ms ease;
+
+            /* Score colors */
+            --score-excellent: #059669;
+            --score-good: #2563eb;
+            --score-fair: #d97706;
+            --score-poor: #dc2626;
+        }
+
+        /* Dark theme */
+        [data-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --bg-input: #1e293b;
+            --bg-code: #0f172a;
+
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --text-link: #818cf8;
+
+            --border-color: #334155;
+            --border-light: #1e293b;
+            --border-focus: #818cf8;
+
+            --color-success-bg: #064e3b;
+            --color-success-border: #065f46;
+            --color-warning-bg: #451a03;
+            --color-warning-border: #78350f;
+            --color-error-bg: #450a0a;
+            --color-error-border: #7f1d1d;
+            --color-info-bg: #1e3a5f;
+            --color-info-border: #1e40af;
+
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+
+            --focus-ring: 0 0 0 3px rgba(129, 140, 248, 0.5);
+        }
+
+        /* ========================================================================
+           RESET & BASE
+           ======================================================================== */
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transition: background-color var(--transition-slow), color var(--transition-slow);
+        }
+
+        /* ========================================================================
+           ACCESSIBILITY — Skip Navigation
+           ======================================================================== */
+        .skip-nav {
+            position: absolute;
+            top: -100%;
+            left: 1rem;
+            z-index: 10000;
+            padding: 0.75rem 1.5rem;
+            background: var(--brand-primary);
+            color: #fff;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            text-decoration: none;
+            transition: top var(--transition-fast);
+        }
+        .skip-nav:focus {
+            top: 1rem;
+            outline: none;
+            box-shadow: var(--focus-ring);
+        }
+
+        /* ========================================================================
+           ACCESSIBILITY — Focus Indicators (WCAG 2.4.7)
+           ======================================================================== */
+        :focus-visible {
+            outline: 3px solid var(--border-focus);
+            outline-offset: 2px;
+        }
+        :focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        /* ========================================================================
+           LAYOUT
+           ======================================================================== */
+        .container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* ========================================================================
+           HEADER
+           ======================================================================== */
+        .site-header {
+            background: var(--brand-gradient);
+            color: var(--text-inverse);
+            padding: 1.25rem 0;
+            position: relative;
+        }
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .header-brand h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.3;
+        }
+        .header-brand p {
+            margin: 0.25rem 0 0;
+            font-size: 0.875rem;
+            opacity: 0.85;
+        }
+        .header-brand a {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-color: rgba(255,255,255,0.4);
+        }
+        .header-brand a:hover { text-decoration-color: rgba(255,255,255,0.9); }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            border-radius: 14px;
+            border: 2px solid rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.15);
+            cursor: pointer;
+            padding: 0;
+            transition: background var(--transition-base);
+        }
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.25);
+            transform: none;
+        }
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform var(--transition-base);
+        }
+        [data-theme="dark"] .theme-toggle::after {
+            transform: translateX(24px);
+        }
+        .theme-toggle-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            line-height: 1;
+            pointer-events: none;
+        }
+        .theme-toggle-icon.sun { left: 5px; }
+        .theme-toggle-icon.moon { right: 5px; }
+
+        /* Keyboard shortcut hint */
+        .kbd-hint {
+            display: inline-block;
+            padding: 0.1rem 0.4rem;
+            font-size: 0.7rem;
+            font-family: inherit;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            color: rgba(255,255,255,0.7);
+            vertical-align: middle;
+            margin-left: 0.25rem;
+        }
+
+        /* ========================================================================
+           CARDS
+           ======================================================================== */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: background var(--transition-slow), border-color var(--transition-slow), box-shadow var(--transition-base);
+        }
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* ========================================================================
+           FORMS
+           ======================================================================== */
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        }
+        .form-input::placeholder { color: var(--text-muted); }
+        .form-input:focus {
+            border-color: var(--border-focus);
+            box-shadow: var(--focus-ring);
+            outline: none;
+        }
+
+        /* ========================================================================
+           BUTTONS
+           ======================================================================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.5rem;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            line-height: 1.4;
+            white-space: nowrap;
+        }
+        .btn:hover { transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+        .btn-primary { background: var(--brand-primary); color: #fff; }
+        .btn-primary:hover { background: var(--brand-primary-hover); }
+        .btn-danger { background: var(--color-error); color: #fff; }
+        .btn-danger:hover { background: #b91c1c; }
+        .btn-success { background: var(--color-success); color: #fff; }
+        .btn-success:hover { background: #047857; }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-link);
+            padding: 0.375rem 0.75rem;
+            font-weight: 500;
+        }
+        .btn-ghost:hover { background: var(--bg-card-hover); transform: none; }
+        .btn-sm { padding: 0.375rem 0.875rem; font-size: 0.8125rem; }
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: var(--radius-md);
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+        .btn-icon:hover { background: var(--bg-card-hover); color: var(--text-primary); transform: none; }
+
+        /* ========================================================================
+           SCORE RINGS
+           ======================================================================== */
+        .score-ring {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.375rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .score-excellent { background: linear-gradient(135deg, #10b981, #059669); }
+        .score-good { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .score-fair { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .score-poor { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+        /* Mini score badge */
+        .score-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 42px;
+            height: 26px;
+            padding: 0 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* ========================================================================
+           METRIC ROWS
+           ======================================================================== */
+        .metric-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 0.625rem 0;
+            border-bottom: 1px solid var(--border-light);
+            gap: 1rem;
+        }
+        .metric-row:last-child { border-bottom: none; }
+        .metric-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+            flex: 1;
+            min-width: 0;
+        }
+        .metric-value {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-weight: 600;
+            flex-shrink: 0;
+            text-align: right;
+        }
+
+        /* Status icons */
+        .icon-pass { color: var(--color-success); }
+        .icon-warn { color: var(--color-warning); }
+        .icon-fail { color: var(--color-error); }
+        .icon-info { color: var(--color-info); }
+
+        /* ========================================================================
+           ACTION ITEMS
+           ======================================================================== */
+        .action-item {
+            border-left: 4px solid;
+            padding: 0.875rem 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            transition: background var(--transition-slow);
+        }
+        .action-critical { border-color: var(--color-error); background: var(--color-error-bg); }
+        .action-high { border-color: var(--color-warning); background: var(--color-warning-bg); }
+        .action-medium { border-color: var(--color-info); background: var(--color-info-bg); }
+        .action-low { border-color: var(--color-success); background: var(--color-success-bg); }
+
+        .badge {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            border-radius: var(--radius-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .badge-critical { background: var(--color-error-border); color: var(--color-error); }
+        .badge-high { background: var(--color-warning-border); color: var(--color-warning); }
+        .badge-medium { background: var(--color-info-border); color: var(--color-info); }
+        .badge-low { background: var(--color-success-border); color: var(--color-success); }
+
+        /* ========================================================================
+           COLLAPSIBLE SECTIONS (details/summary)
+           ======================================================================== */
+        .section-collapse {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: background var(--transition-slow), border-color var(--transition-slow);
+        }
+        .section-collapse summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+            gap: 1rem;
+            transition: background var(--transition-fast);
+        }
+        .section-collapse summary::-webkit-details-marker { display: none; }
+        .section-collapse summary::before {
+            content: '▶';
+            font-size: 0.625rem;
+            color: var(--text-muted);
+            transition: transform var(--transition-base);
+            flex-shrink: 0;
+            width: 1rem;
+        }
+        .section-collapse[open] summary::before {
+            transform: rotate(90deg);
+        }
+        .section-collapse summary:hover {
+            background: var(--bg-card-hover);
+        }
+        .section-collapse .section-title {
+            font-size: 1.0625rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            flex: 1;
+            min-width: 0;
+        }
+        .section-collapse .section-body {
+            padding: 0 1.5rem 1.5rem;
+        }
+        .section-desc {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin: 0 0 1rem;
+            line-height: 1.55;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        /* ========================================================================
+           LOADING
+           ======================================================================== */
+        .loader-overlay {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--border-light);
+            border-top-color: var(--brand-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .progress-steps {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+            max-width: 320px;
+            margin: 1.5rem auto 0;
+            text-align: left;
+        }
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            transition: color var(--transition-fast);
+        }
+        .progress-step.active { color: var(--text-primary); font-weight: 600; }
+        .progress-step.done { color: var(--color-success); }
+        .progress-step .step-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        /* ========================================================================
+           CODE BLOCK
+           ======================================================================== */
+        .code-block {
+            background: var(--bg-code);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            overflow-x: auto;
+        }
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .code-block code {
+            color: #4ade80;
+            font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-size: 0.8125rem;
+            line-height: 1.6;
+        }
+
+        /* ========================================================================
+           TOAST NOTIFICATIONS
+           ======================================================================== */
+        .toast-container {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            pointer-events: none;
+        }
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #fff;
+            box-shadow: var(--shadow-lg);
+            pointer-events: auto;
+            animation: toast-in 0.3s ease forwards;
+            max-width: 380px;
+        }
+        .toast.toast-out { animation: toast-out 0.3s ease forwards; }
+        .toast-success { background: var(--color-success); }
+        .toast-error { background: var(--color-error); }
+        .toast-info { background: var(--color-info); }
+        .toast-warning { background: var(--color-warning); }
+        @keyframes toast-in { from { opacity: 0; transform: translateY(1rem); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes toast-out { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(1rem); } }
+
+        /* ========================================================================
+           KEYBOARD SHORTCUTS DIALOG
+           ======================================================================== */
+        .dialog-backdrop {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-overlay);
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-base), visibility var(--transition-base);
+        }
+        .dialog-backdrop.open { opacity: 1; visibility: visible; }
+        .dialog-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            padding: 2rem;
+            max-width: 480px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform var(--transition-base);
+        }
+        .dialog-backdrop.open .dialog-panel { transform: scale(1); }
+        .dialog-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin: 0 0 1rem;
+        }
+        .shortcut-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .shortcut-row:last-child { border-bottom: none; }
+        .shortcut-keys {
+            display: flex;
+            gap: 0.25rem;
+        }
+        kbd {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            font-size: 0.75rem;
+            font-family: inherit;
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            box-shadow: 0 1px 0 var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        /* ========================================================================
+           GRID UTILITIES
+           ======================================================================== */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+        }
+        .grid-scores {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+        }
+
+        /* ========================================================================
+           SCORE SUMMARY CARDS
+           ======================================================================== */
+        .score-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem;
+            text-align: center;
+            transition: all var(--transition-base);
+        }
+        .score-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        .score-card .score-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .score-card .score-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* ========================================================================
+           FOOTER
+           ======================================================================== */
+        .site-footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-light);
+            margin-top: 2rem;
+        }
+        .site-footer a {
+            color: var(--text-link);
+            text-decoration: none;
+        }
+        .site-footer a:hover { text-decoration: underline; }
+
+        /* ========================================================================
+           UTILITY
+           ======================================================================== */
+        .hidden { display: none !important; }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        .text-center { text-align: center; }
+        .mb-0 { margin-bottom: 0; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .flex { display: flex; }
+        .flex-wrap { flex-wrap: wrap; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-end { justify-content: flex-end; }
+        .gap-1 { gap: 0.5rem; }
+        .gap-2 { gap: 1rem; }
+        .gap-3 { gap: 1.5rem; }
+
+        /* ========================================================================
+           RESPONSIVE
+           ======================================================================== */
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .grid-scores { grid-template-columns: repeat(2, 1fr); }
+            .header-inner { flex-direction: column; align-items: flex-start; }
+            .header-actions { width: 100%; justify-content: flex-end; }
+            .overall-row { flex-direction: column; align-items: flex-start; gap: 1rem; }
+        }
+
+        /* ========================================================================
+           PRINT
+           ======================================================================== */
+        @media print {
+            .no-print { display: none !important; }
+            body {
+                background: #fff !important;
+                color: #000 !important;
+                font-size: 11pt;
+            }
+            .site-header { background: none !important; color: #000 !important; border-bottom: 2px solid #000; }
+            .card, .section-collapse, .score-card {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+                break-inside: avoid;
+            }
+            .section-collapse[open] summary::before { content: ''; }
+            .toast-container, .dialog-backdrop { display: none !important; }
+        }
+
+        /* ========================================================================
+           HIGH CONTRAST (forced-colors)
+           ======================================================================== */
+        @media (forced-colors: active) {
+            .score-ring, .badge, .score-badge {
+                forced-color-adjust: none;
+            }
+            .btn {
+                border: 1px solid ButtonText;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip Navigation (WCAG 2.4.1) -->
+    <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+    <!-- Header -->
+    <header class="site-header" role="banner">
+        <div class="container header-inner">
+            <div class="header-brand">
+                <h1>SEO &amp; GEO Analyzer Pro</h1>
+                <p>Enterprise website analysis for search engine &amp; AI optimization</p>
+                <p style="font-size:0.75rem;opacity:0.7;margin-top:0.125rem;">
+                    <a href="https://www.legacyai.space" target="_blank" rel="noopener noreferrer">Legacy AI</a> ·
+                    <a href="https://www.floydslabs.com" target="_blank" rel="noopener noreferrer">Floyd's Labs</a> © 2026
+                </p>
+            </div>
+            <div class="header-actions no-print">
+                <button id="shortcuts-btn" class="btn-icon" aria-label="Keyboard shortcuts" title="Keyboard shortcuts (?)">
+                    <span aria-hidden="true">⌨</span>
+                </button>
+                <button id="theme-toggle" class="theme-toggle" role="switch" aria-checked="false" aria-label="Toggle dark mode" title="Toggle theme (D)">
+                    <span class="theme-toggle-icon sun" aria-hidden="true">☀</span>
+                    <span class="theme-toggle-icon moon" aria-hidden="true">☾</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="container" role="main" style="padding:2rem 0;">
+
+        <!-- URL Input Section -->
+        <section id="input-section" class="card no-print" aria-labelledby="input-heading">
+            <h2 id="input-heading" class="sr-only">Website URL Input</h2>
+            <div class="flex gap-2" style="flex-wrap:wrap;">
+                <div style="flex:1;min-width:260px;">
+                    <label for="url-input" class="form-label">Website URL to Analyze</label>
+                    <input type="url" id="url-input" class="form-input" placeholder="https://example.com"
+                           aria-describedby="url-hint" autocomplete="url" spellcheck="false">
+                    <p id="url-hint" class="sr-only">Enter the full URL including https://</p>
+                </div>
+                <div style="display:flex;align-items:flex-end;">
+                    <button id="analyze-btn" class="btn btn-primary">
+                        <span aria-hidden="true">🔍</span> Analyze
+                    </button>
+                </div>
+            </div>
+            <div class="mt-1 flex flex-wrap gap-1 items-center" role="group" aria-label="Quick test URLs">
+                <span style="font-size:0.8125rem;color:var(--text-muted);">Quick test:</span>
+                <button class="btn btn-ghost btn-sm" data-url="https://www.apple.com">Apple</button>
+                <button class="btn btn-ghost btn-sm" data-url="https://www.nike.com">Nike</button>
+                <button class="btn btn-ghost btn-sm" data-url="https://www.mozilla.org">Mozilla</button>
+                <button class="btn btn-ghost btn-sm" data-url="https://www.github.com">GitHub</button>
+                <button class="btn btn-ghost btn-sm" data-url="https://www.wikipedia.org">Wikipedia</button>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <section id="loading-section" class="hidden" aria-labelledby="loading-heading" aria-live="polite">
+            <div class="card loader-overlay">
+                <h2 id="loading-heading" class="sr-only">Analysis in progress</h2>
+                <div class="loader-spinner" role="status" aria-label="Loading"></div>
+                <p style="font-size:1.125rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">Analyzing website…</p>
+                <p id="loading-url" style="font-size:0.875rem;color:var(--text-muted);margin:0 0 1.5rem;"></p>
+                <div id="progress-steps" class="progress-steps" role="list" aria-label="Analysis steps"></div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="results-section" class="hidden" aria-labelledby="results-heading">
+            <h2 id="results-heading" class="sr-only">Analysis Results</h2>
+
+            <!-- Top controls -->
+            <div class="flex justify-between items-center mb-2 no-print" style="flex-wrap:wrap;gap:0.75rem;">
+                <button id="new-analysis-btn" class="btn btn-ghost btn-sm">← New Analysis</button>
+                <div class="flex gap-1">
+                    <button id="copy-prompt-btn-top" class="btn btn-success btn-sm" aria-label="Copy LLM prompt to clipboard">
+                        <span aria-hidden="true">📋</span> Copy LLM Prompt
+                    </button>
+                    <button id="export-pdf-btn" class="btn btn-danger btn-sm" aria-label="Export analysis as PDF">
+                        <span aria-hidden="true">📄</span> Export PDF Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- Overall Score -->
+            <div id="overall-score-card" class="card mb-2" role="region" aria-label="Overall Score">
+                <div class="flex items-center justify-between" style="flex-wrap:wrap;gap:1rem;">
+                    <div style="flex:1;min-width:200px;">
+                        <h3 style="font-size:1.375rem;font-weight:700;margin:0;">Overall SEO &amp; GEO Score</h3>
+                        <p id="analyzed-url" style="color:var(--text-muted);margin:0.25rem 0 0;font-size:0.875rem;word-break:break-all;"></p>
+                        <p id="analyzed-timestamp" style="color:var(--text-muted);margin:0.125rem 0 0;font-size:0.75rem;"></p>
+                    </div>
+                    <div id="overall-score" class="score-ring score-good" aria-label="Overall score">--</div>
+                </div>
+            </div>
+
+            <!-- Score Summary Grid -->
+            <div id="scores-grid" class="grid-scores mb-2" role="region" aria-label="Category Scores"></div>
+
+            <!-- Action Items -->
+            <details class="section-collapse mb-2" open id="section-actions">
+                <summary>
+                    <span class="section-title">Prioritized Action Items</span>
+                    <span id="action-count-badge" class="badge badge-high">0 items</span>
+                </summary>
+                <div class="section-body">
+                    <p class="section-desc">Actionable recommendations sorted by impact. Each item includes an implementation instruction suitable for developers or LLM-assisted coding.</p>
+                    <div id="action-items-container" role="list" aria-label="Action items"></div>
+                </div>
+            </details>
+
+            <!-- Detail Sections - generated dynamically -->
+            <div id="detail-sections" class="grid-2"></div>
+
+            <!-- LLM Prompt Export -->
+            <details class="section-collapse mb-2" id="section-llm">
+                <summary>
+                    <span class="section-title">Copy-Ready LLM Prompt</span>
+                    <span class="badge badge-medium">Prompt</span>
+                </summary>
+                <div class="section-body">
+                    <p class="section-desc">Paste this entire prompt into ChatGPT, Claude, or another LLM to implement all recommended improvements automatically.</p>
+                    <div class="code-block" style="max-height:400px;overflow-y:auto;">
+                        <pre><code id="llm-prompt"></code></pre>
+                    </div>
+                    <div class="mt-1 no-print">
+                        <button id="copy-prompt-btn" class="btn btn-success btn-sm">
+                            <span aria-hidden="true">📋</span> Copy to Clipboard
+                        </button>
+                    </div>
+                </div>
+            </details>
+        </section>
+
+        <!-- Error Section -->
+        <section id="error-section" class="hidden" role="alert" aria-labelledby="error-heading">
+            <div class="card" style="border:1px solid var(--color-error-border);background:var(--color-error-bg);">
+                <h2 id="error-heading" style="font-size:1rem;font-weight:700;color:var(--color-error);margin:0 0 0.5rem;">Analysis Failed</h2>
+                <p id="error-message" style="color:var(--color-error);margin:0 0 0.5rem;"></p>
+                <p style="color:var(--text-muted);font-size:0.8125rem;margin:0 0 1rem;">The site may block cross-origin requests. Try a different URL or run this tool on a local server.</p>
+                <button id="retry-btn" class="btn btn-primary btn-sm no-print">Try Again</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer no-print" role="contentinfo">
+        <p style="margin:0;">SEO &amp; GEO Analyzer Pro — Enterprise Edition</p>
+        <p style="margin:0.25rem 0 0;">Copyright © 2026 <a href="https://www.legacyai.space" target="_blank" rel="noopener noreferrer">Legacy AI</a> · <a href="https://www.floydslabs.com" target="_blank" rel="noopener noreferrer">Floyd's Labs</a></p>
+    </footer>
+
+    <!-- Toast Container (ARIA live region) -->
+    <div id="toast-container" class="toast-container" role="status" aria-live="polite" aria-atomic="false"></div>
+
+    <!-- Keyboard Shortcuts Dialog -->
+    <div id="shortcuts-dialog" class="dialog-backdrop" role="dialog" aria-labelledby="shortcuts-title" aria-modal="true">
+        <div class="dialog-panel">
+            <div class="flex justify-between items-center mb-2">
+                <h2 id="shortcuts-title" class="dialog-title" style="margin:0;">Keyboard Shortcuts</h2>
+                <button id="shortcuts-close" class="btn-icon" aria-label="Close dialog">✕</button>
+            </div>
+            <div class="shortcut-row"><span>Run analysis</span><span class="shortcut-keys"><kbd>⌘</kbd><kbd>Enter</kbd></span></div>
+            <div class="shortcut-row"><span>Export PDF</span><span class="shortcut-keys"><kbd>⌘</kbd><kbd>Shift</kbd><kbd>E</kbd></span></div>
+            <div class="shortcut-row"><span>Copy LLM prompt</span><span class="shortcut-keys"><kbd>⌘</kbd><kbd>Shift</kbd><kbd>C</kbd></span></div>
+            <div class="shortcut-row"><span>Toggle theme</span><span class="shortcut-keys"><kbd>D</kbd></span></div>
+            <div class="shortcut-row"><span>New analysis</span><span class="shortcut-keys"><kbd>N</kbd></span></div>
+            <div class="shortcut-row"><span>This dialog</span><span class="shortcut-keys"><kbd>?</kbd></span></div>
+            <div class="shortcut-row"><span>Close dialog</span><span class="shortcut-keys"><kbd>Esc</kbd></span></div>
+        </div>
+    </div>
+
+    <!-- jsPDF for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+    /**
+     * SEO & GEO Analyzer Pro — Enterprise Edition
+     * Copyright (c) 2026 Legacy AI / Floyd's Labs
+     * www.LegacyAI.space | www.FloydsLabs.com
+     */
+    (function() {
+        'use strict';
+
+        /* ====================================================================
+           CONSTANTS
+           ==================================================================== */
+        const CORS_PROXIES = [
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?',
+            'https://api.codetabs.com/v1/proxy?quest='
+        ];
+
+        const LOADING_STEPS = [
+            'Fetching website content',
+            'Parsing HTML structure',
+            'Analyzing On-Page SEO',
+            'Analyzing GEO readiness',
+            'Analyzing accessibility',
+            'Analyzing social & technical SEO',
+            'Scoring & generating report'
+        ];
+
+        /* ====================================================================
+           METRIC DESCRIPTIONS — what each section measures and why
+           ==================================================================== */
+        const SECTION_META = {
+            onpage: {
+                title: 'On-Page SEO',
+                icon: '🔍',
+                color: '#4f46e5',
+                desc: 'On-Page SEO evaluates the HTML elements that search engines read to understand page content. This includes the title tag (displayed in search results and browser tabs), the meta description (the snippet shown below your title in search results), heading hierarchy (H1–H6 tags that structure your content semantically), image alt text (critical for accessibility and image search), canonical URLs (to prevent duplicate content penalties), and word count (search engines favor thorough, substantive content).'
+            },
+            geo: {
+                title: 'GEO — AI Engine Optimization',
+                icon: '🤖',
+                color: '#16a34a',
+                desc: 'Generative Engine Optimization (GEO) measures how well your content is structured for AI systems like ChatGPT, Perplexity, Google SGE, and Copilot. AI engines favor content with direct answers near the top of the page, FAQ patterns that match natural-language queries, structured data (schema markup) that machines can parse, data tables and lists for comparison queries, original statistics that AI can cite, and summary/takeaway boxes that provide concise overviews.'
+            },
+            core: {
+                title: 'CORE Analysis',
+                icon: '📊',
+                color: '#7c3aed',
+                desc: 'The CORE framework assesses content quality across four dimensions: Contextual Clarity (does the page clearly communicate its purpose and topic?), Organization (is content logically structured with well-defined sections?), Referenceability (does it cite sources and link to authoritative references?), and Exclusivity (does it offer original data, research, or unique insights not found elsewhere?).'
+            },
+            eeat: {
+                title: 'E-E-A-T Assessment',
+                icon: '🏆',
+                color: '#d97706',
+                desc: 'E-E-A-T stands for Experience, Expertise, Authoritativeness, and Trustworthiness — Google\'s quality framework. Experience checks for first-hand knowledge signals (author info, dates). Expertise looks for credentials and content depth. Authoritativeness assesses external linking and domain reputation signals. Trustworthiness evaluates contact information, privacy policies, and about pages.'
+            },
+            accessibility: {
+                title: 'Accessibility Audit',
+                icon: '♿',
+                color: '#0891b2',
+                desc: 'Accessibility ensures your website is usable by everyone, including people with disabilities. This audit checks for WCAG 2.1 compliance signals: language attributes, ARIA landmarks, semantic HTML elements, form labels, skip navigation, image alt text coverage, and keyboard-navigable interactive elements. Good accessibility also improves SEO because search engines reward semantic, well-structured HTML.'
+            },
+            social: {
+                title: 'Social SEO',
+                icon: '📱',
+                color: '#db2777',
+                desc: 'Social SEO evaluates how your page appears when shared on social platforms. Open Graph tags control your preview on Facebook, LinkedIn, and most social networks. Twitter Card tags control the preview on X/Twitter. Complete social meta tags significantly increase click-through rates from social shares — pages with rich previews receive up to 40% more engagement.'
+            },
+            technical: {
+                title: 'Technical SEO',
+                icon: '⚙️',
+                color: '#ea580c',
+                desc: 'Technical SEO covers the infrastructure signals that search engines use to crawl, index, and rank your site. This includes mobile viewport configuration, character encoding, language attributes, robots meta directives, canonical URLs, hreflang tags for internationalization, structured data variety, performance hints (preload/preconnect), web app manifest, favicon, and script loading optimization.'
+            }
+        };
+
+        /* ====================================================================
+           STATE
+           ==================================================================== */
+        let analysisResults = null;
+
+        /* ====================================================================
+           DOM REFERENCES
+           ==================================================================== */
+        const $ = (sel) => document.querySelector(sel);
+        const $$ = (sel) => document.querySelectorAll(sel);
+
+        /* ====================================================================
+           THEME MANAGEMENT
+           ==================================================================== */
+        function initTheme() {
+            const saved = localStorage.getItem('seo-analyzer-theme');
+            if (saved) {
+                setTheme(saved);
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                setTheme('dark');
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (!localStorage.getItem('seo-analyzer-theme')) {
+                    setTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+        }
+
+        function setTheme(theme) {
+            document.documentElement.dataset.theme = theme;
+            const toggle = $('#theme-toggle');
+            if (toggle) toggle.setAttribute('aria-checked', theme === 'dark' ? 'true' : 'false');
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.dataset.theme;
+            const next = current === 'dark' ? 'light' : 'dark';
+            setTheme(next);
+            localStorage.setItem('seo-analyzer-theme', next);
+            showToast(`Switched to ${next} mode`, 'info');
+        }
+
+        /* ====================================================================
+           TOAST NOTIFICATIONS
+           ==================================================================== */
+        function showToast(message, type = 'info', duration = 3000) {
+            const container = $('#toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('toast-out');
+                toast.addEventListener('animationend', () => toast.remove());
+            }, duration);
+        }
+
+        /* ====================================================================
+           DIALOG MANAGEMENT
+           ==================================================================== */
+        function openDialog(id) {
+            const d = $(`#${id}`);
+            if (d) { d.classList.add('open'); d.querySelector('[aria-label="Close dialog"]')?.focus(); }
+        }
+        function closeDialog(id) {
+            const d = $(`#${id}`);
+            if (d) d.classList.remove('open');
+        }
+
+        /* ====================================================================
+           LOADING & PROGRESS
+           ==================================================================== */
+        function showLoading(url) {
+            $('#input-section').classList.add('hidden');
+            $('#loading-section').classList.remove('hidden');
+            $('#results-section').classList.add('hidden');
+            $('#error-section').classList.add('hidden');
+            $('#loading-url').textContent = url;
+
+            const stepsEl = $('#progress-steps');
+            stepsEl.innerHTML = LOADING_STEPS.map((step, i) =>
+                `<div class="progress-step${i === 0 ? ' active' : ''}" role="listitem">
+                    <span class="step-icon" aria-hidden="true">${i === 0 ? '◉' : '○'}</span>
+                    <span>${step}</span>
+                </div>`
+            ).join('');
+        }
+
+        function updateStep(index) {
+            const steps = $$('#progress-steps .progress-step');
+            steps.forEach((step, i) => {
+                const icon = step.querySelector('.step-icon');
+                if (i < index) {
+                    step.className = 'progress-step done';
+                    icon.textContent = '✓';
+                } else if (i === index) {
+                    step.className = 'progress-step active';
+                    icon.textContent = '◉';
+                } else {
+                    step.className = 'progress-step';
+                    icon.textContent = '○';
+                }
+            });
+        }
+
+        function hideLoading() {
+            $('#loading-section').classList.add('hidden');
+            $('#input-section').classList.remove('hidden');
+        }
+
+        function showError(message) {
+            hideLoading();
+            $('#error-section').classList.remove('hidden');
+            $('#error-message').textContent = message;
+        }
+
+        /* ====================================================================
+           FETCH
+           ==================================================================== */
+        async function fetchWithProxy(url) {
+            for (const proxy of CORS_PROXIES) {
+                try {
+                    const response = await fetch(proxy + encodeURIComponent(url), { signal: AbortSignal.timeout(15000) });
+                    if (response.ok) return await response.text();
+                } catch (e) { continue; }
+            }
+            throw new Error('Unable to fetch URL. The site may block cross-origin requests.');
+        }
+
+        /* ====================================================================
+           MAIN ANALYSIS FLOW
+           ==================================================================== */
+        async function analyzeWebsite() {
+            let url = $('#url-input').value.trim();
+            if (!url) { showToast('Please enter a URL to analyze.', 'warning'); $('#url-input').focus(); return; }
+            if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+
+            showLoading(url);
+
+            try {
+                updateStep(0);
+                const html = await fetchWithProxy(url);
+
+                updateStep(1);
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                updateStep(2);
+                const onpage = analyzeOnPage(doc, html, url);
+
+                updateStep(3);
+                const geo = analyzeGEO(doc, html);
+
+                updateStep(4);
+                const accessibility = analyzeAccessibility(doc, html);
+
+                updateStep(5);
+                const social = analyzeSocialSEO(doc, html);
+                const technical = analyzeTechnical(doc, html);
+                const core = analyzeCORE(doc, html);
+                const eeat = analyzeEEAT(doc, html);
+
+                updateStep(6);
+                const analysis = { url, timestamp: new Date().toISOString(), onpage, geo, core, eeat, accessibility, social, technical };
+                analysis.scores = calculateScores(analysis);
+                analysis.actionItems = generateActionItems(analysis);
+                analysis.llmPrompt = generateLLMPrompt(analysis);
+
+                analysisResults = analysis;
+                displayResults(analysis);
+                showToast('Analysis complete!', 'success');
+            } catch (error) {
+                showError(error.message);
+                showToast('Analysis failed: ' + error.message, 'error', 5000);
+            }
+        }
+
+        /* ====================================================================
+           ANALYZERS
+           ==================================================================== */
+
+        function analyzeOnPage(doc, html, url) {
+            const title = doc.querySelector('title')?.textContent || '';
+            const metaDesc = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
+            const metaKeywords = doc.querySelector('meta[name="keywords"]')?.getAttribute('content') || '';
+            const h1s = doc.querySelectorAll('h1');
+            const h2s = doc.querySelectorAll('h2');
+            const h3s = doc.querySelectorAll('h3');
+            const h4s = doc.querySelectorAll('h4');
+            const images = doc.querySelectorAll('img');
+            const links = doc.querySelectorAll('a[href]');
+            const canonical = doc.querySelector('link[rel="canonical"]')?.getAttribute('href') || '';
+            const bodyText = doc.body?.textContent || '';
+            const wordCount = bodyText.split(/\s+/).filter(w => w.length > 0).length;
+
+            const imagesWithoutAlt = Array.from(images).filter(img => !img.getAttribute('alt') || img.getAttribute('alt').trim() === '');
+            const imagesWithoutDimensions = Array.from(images).filter(img => !img.getAttribute('width') || !img.getAttribute('height'));
+            const internalLinks = Array.from(links).filter(a => { try { return new URL(a.href, url).hostname === new URL(url).hostname; } catch { return false; } });
+            const externalLinks = Array.from(links).filter(a => { try { return new URL(a.href, url).hostname !== new URL(url).hostname; } catch { return false; } });
+
+            // Link anchor text analysis
+            const genericAnchors = ['click here', 'read more', 'here', 'link', 'more', 'learn more', 'this'];
+            const linksWithGenericText = Array.from(links).filter(a => {
+                const text = a.textContent.trim().toLowerCase();
+                return genericAnchors.includes(text) || text.length < 2;
+            });
+            const descriptiveAnchorCoverage = links.length > 0 ? Math.round((links.length - linksWithGenericText.length) / links.length * 100) : 100;
+
+            let urlSlugClean = false;
+            try { const u = new URL(url); urlSlugClean = !u.pathname.match(/[A-Z]/) && !u.pathname.match(/[_]/) && u.pathname.length < 100; } catch {}
+
+            return {
+                title: { value: title, length: title.length, optimal: title.length >= 30 && title.length <= 60, exists: !!title },
+                metaDescription: { value: metaDesc, length: metaDesc.length, optimal: metaDesc.length >= 120 && metaDesc.length <= 160, exists: !!metaDesc },
+                metaKeywords: { exists: !!metaKeywords, note: 'Deprecated — not used by major search engines' },
+                headings: {
+                    h1: { count: h1s.length, texts: Array.from(h1s).map(h => h.textContent.trim().substring(0, 80)) },
+                    h2: { count: h2s.length },
+                    h3: { count: h3s.length },
+                    h4: { count: h4s.length },
+                    hasHierarchy: h1s.length === 1 && h2s.length > 0,
+                    totalHeadings: h1s.length + h2s.length + h3s.length + h4s.length
+                },
+                images: {
+                    total: images.length,
+                    withoutAlt: imagesWithoutAlt.length,
+                    withoutDimensions: imagesWithoutDimensions.length,
+                    altCoverage: images.length > 0 ? Math.round((images.length - imagesWithoutAlt.length) / images.length * 100) : 100,
+                    dimensionCoverage: images.length > 0 ? Math.round((images.length - imagesWithoutDimensions.length) / images.length * 100) : 100
+                },
+                links: {
+                    total: links.length,
+                    internal: internalLinks.length,
+                    external: externalLinks.length,
+                    genericAnchors: linksWithGenericText.length,
+                    descriptiveAnchorCoverage
+                },
+                canonical: { exists: !!canonical, value: canonical },
+                urlSlug: { clean: urlSlugClean },
+                content: { wordCount, sufficient: wordCount >= 300, rating: wordCount >= 2000 ? 'comprehensive' : wordCount >= 1000 ? 'good' : wordCount >= 300 ? 'adequate' : 'thin' }
+            };
+        }
+
+        function analyzeGEO(doc, html) {
+            const bodyText = doc.body?.textContent || '';
+            const first200Words = bodyText.split(/\s+/).slice(0, 200).join(' ');
+
+            const scripts = doc.querySelectorAll('script[type="application/ld+json"]');
+            let schemaTypes = [];
+            scripts.forEach(s => { try { const j = JSON.parse(s.textContent); schemaTypes.push(j['@type'] || (Array.isArray(j['@graph']) ? j['@graph'].map(g => g['@type']).join(', ') : 'unknown')); } catch {} });
+            const hasFAQSchema = schemaTypes.some(t => t && t.includes('FAQ'));
+            const hasArticleSchema = schemaTypes.some(t => t && (t.includes('Article') || t.includes('BlogPosting') || t.includes('NewsArticle')));
+            const hasHowToSchema = schemaTypes.some(t => t && t.includes('HowTo'));
+
+            const tables = doc.querySelectorAll('table');
+            const lists = doc.querySelectorAll('ul, ol');
+            const definitionLists = doc.querySelectorAll('dl');
+            const hasNumbers = /\d+(\.\d+)?%|\$\d|\d+\s*(percent|million|billion|thousand|users|customers|employees)/i.test(bodyText);
+            const hasQAPattern = /\bwhat\b.*\?|\bhow\b.*\?|\bwhy\b.*\?|\bwhen\b.*\?|\bFAQ\b|\bQ\s*:|frequently asked/i.test(bodyText);
+            const questionCount = (bodyText.match(/\b(what|how|why|when|where|which|who|can|does|is|are|should|will)\b[^.!]*\?/gi) || []).length;
+            const hasTakeaways = /\b(takeaway|key point|summary|highlight|tl;?dr|in summary|at a glance|bottom line)\b/i.test(bodyText);
+            const hasComparisons = /\bvs\.?\b|\bversus\b|\bcompare|comparison|\bpros?\b.*\bcons?\b/i.test(bodyText);
+            const hasStepByStep = /step\s*\d|step-by-step|\bfirst\b.*\bthen\b.*\bfinally\b/i.test(bodyText);
+
+            // Content Quotability — pull quotes, highlighted sections, short quotable paragraphs
+            const blockquotes = doc.querySelectorAll('blockquote, .pull-quote, .pullquote, .highlight, .callout');
+            const hasPullQuotes = blockquotes.length > 0;
+            // Analyze paragraph lengths for quotability
+            const paragraphs = doc.querySelectorAll('p');
+            const paraLengths = Array.from(paragraphs).map(p => p.textContent.trim().length).filter(l => l > 0);
+            const longParagraphs = paraLengths.filter(l => l > 300);
+            const quotableParagraphs = paraLengths.filter(l => l >= 40 && l <= 200);
+            const avgParaLength = paraLengths.length > 0 ? Math.round(paraLengths.reduce((a, b) => a + b, 0) / paraLengths.length) : 0;
+            const hasShortQuotableContent = quotableParagraphs.length >= 3;
+
+            // Citation Readiness — expert quotes, citations, concise claim statements
+            const hasExpertQuotes = /\b(said|stated|explained|noted|according to|argues|points out|observes)\s/i.test(bodyText);
+            const hasCitedSources = /\b(source:|citation:|reference:|doi:|isbn:|\[\d+\]|et al\.)/i.test(bodyText);
+
+            return {
+                directAnswer: { hasEarlyAnswer: first200Words.length > 100, snippet: first200Words.substring(0, 250) },
+                faqCoverage: { hasFAQSchema, hasQAPattern, questionCount },
+                dataTables: { tableCount: tables.length, listCount: lists.length, definitionListCount: definitionLists.length },
+                schemaMarkup: { hasFAQSchema, hasArticleSchema, hasHowToSchema, schemaCount: scripts.length, schemaTypes },
+                originalData: { hasStatistics: hasNumbers },
+                summaryBox: { hasTakeaways },
+                comparisons: { hasComparisons },
+                stepByStep: { hasStepByStep },
+                contentQuotability: {
+                    hasPullQuotes,
+                    pullQuoteCount: blockquotes.length,
+                    totalParagraphs: paraLengths.length,
+                    longParagraphs: longParagraphs.length,
+                    quotableParagraphs: quotableParagraphs.length,
+                    avgParaLength,
+                    hasShortQuotableContent
+                },
+                citationReadiness: {
+                    hasExpertQuotes,
+                    hasCitedSources,
+                    quotableParagraphCount: quotableParagraphs.length
+                }
+            };
+        }
+
+        function analyzeCORE(doc, html) {
+            const bodyText = doc.body?.textContent || '';
+            const title = doc.querySelector('title')?.textContent || '';
+            const metaDesc = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
+
+            // Contextual Clarity
+            const hasClearPurpose = title.length > 10 && (metaDesc.length > 50 || bodyText.length > 500);
+            const hasStructuredContent = doc.querySelectorAll('h2, h3').length >= 2;
+            const hasIntroduction = (() => {
+                const firstH2 = doc.querySelector('h2');
+                if (!firstH2) return false;
+                const introText = [];
+                let el = doc.body?.firstChild;
+                while (el && el !== firstH2) {
+                    if (el.textContent) introText.push(el.textContent.trim());
+                    el = el.nextSibling || el.nextElementSibling;
+                }
+                return introText.join(' ').split(/\s+/).length > 20;
+            })();
+
+            // Organization
+            const h2Count = doc.querySelectorAll('h2').length;
+            const hasSections = h2Count >= 3;
+            const hasTOC = !!doc.querySelector('[id*="toc"], [class*="toc"], [class*="table-of-contents"], [id*="table-of-contents"], nav[class*="content"]') ||
+                /table of contents/i.test(bodyText.substring(0, 2000));
+            const hasConclusion = /\b(conclusion|summary|in summary|final thoughts|wrapping up|to summarize|in closing|the bottom line)\b/i.test(bodyText);
+
+            // Referenceability
+            const hasCitations = /\b(source|citation|according to|referenced|reported by|published in|study by)\b/i.test(bodyText);
+            const hasExternalLinks = doc.querySelectorAll('a[href^="http"]').length > 2;
+            const hasQuotes = /"[^"]{20,}"/.test(bodyText) || doc.querySelectorAll('blockquote').length > 0;
+            const hasAuthorInfo = /\b(author|written by|by\s+[A-Z][a-z]+|posted by|contributor)\b/i.test(bodyText) || !!doc.querySelector('[rel="author"], .author, [itemprop="author"]');
+
+            // Exclusivity
+            const hasUniqueData = /\d+(\.\d+)?%|\bstudy\b|\bresearch\b|\bsurvey\b|\boriginal\b|\bexclusive\b|\bproprietary\b/i.test(bodyText);
+            const hasCaseStudies = /\b(case study|case studies|real-world example|real world example|client story|success story|use case)\b/i.test(bodyText);
+            const hasExpertTips = /\b(expert tip|pro tip|insider|insider tip|best practice|our experience|we found|we discovered|our team)\b/i.test(bodyText);
+            const hasUniqueHighlight = /\b(unique|proprietary|exclusive|first-of-its-kind|only|our approach|what sets us apart|what makes us different)\b/i.test(bodyText);
+
+            return {
+                contextualClarity: {
+                    hasClearPurpose, hasStructuredContent, hasIntroduction,
+                    score: (hasClearPurpose ? 35 : 0) + (hasStructuredContent ? 35 : 0) + (hasIntroduction ? 30 : 0)
+                },
+                organization: {
+                    hasSections, headingCount: h2Count, hasTOC, hasConclusion,
+                    score: (hasSections ? 40 : (h2Count > 0 ? 20 : 0)) + (hasTOC ? 30 : 0) + (hasConclusion ? 30 : 0)
+                },
+                referenceability: {
+                    hasCitations, hasExternalLinks, hasQuotes, hasAuthorInfo,
+                    score: (hasCitations ? 25 : 0) + (hasExternalLinks ? 25 : 0) + (hasQuotes ? 25 : 0) + (hasAuthorInfo ? 25 : 0)
+                },
+                exclusivity: {
+                    hasUniqueData, hasCaseStudies, hasExpertTips, hasUniqueHighlight,
+                    score: (hasUniqueData ? 25 : 0) + (hasCaseStudies ? 25 : 0) + (hasExpertTips ? 25 : 0) + (hasUniqueHighlight ? 25 : 0)
+                }
+            };
+        }
+
+        function analyzeEEAT(doc, html) {
+            const bodyText = doc.body?.textContent || '';
+            const wc = bodyText.split(/\s+/).length;
+
+            // Experience signals
+            const hasAuthorInfo = /\b(author|written by|by\s+[A-Z][a-z]+\s+[A-Z]|posted by|contributor|editor)\b/i.test(bodyText) || !!doc.querySelector('[rel="author"], .author, [itemprop="author"]');
+            const hasDateInfo = /\b(published|updated|modified|posted on|date)\b/i.test(bodyText) || !!doc.querySelector('time, [itemprop="datePublished"], [itemprop="dateModified"]');
+            const hasPracticalExamples = /\b(for example|for instance|real-world|real world|in practice|hands-on|practical|we implemented|we used|our experience)\b/i.test(bodyText);
+            const hasCaseStudies = /\b(case study|case studies|client story|success story|customer story|implementation)\b/i.test(bodyText);
+            const hasTestimonials = /\b(testimonial|review|feedback|what .* say|customer review|user feedback|rating|stars|recommendation)\b/i.test(bodyText) || !!doc.querySelector('.testimonial, .review, [itemprop="review"], .rating');
+
+            // Expertise signals
+            const hasCredentials = /\b(expert|specialist|ph\.?d|dr\.|professor|certified|licensed|accredited|award|recognized|years of experience|\d+\+?\s*years)\b/i.test(bodyText);
+            const hasDepth = wc > 800;
+            const hasSchemaOrg = doc.querySelectorAll('script[type="application/ld+json"]').length > 0;
+            const hasAuthorAttribution = !!doc.querySelector('[rel="author"], .author, [itemprop="author"], .byline, .bio, .author-bio');
+            const hasCitationsToSources = /\b(according to|cited by|source:|reference:|study shows|research indicates|data from)\b/i.test(bodyText);
+
+            // Authoritativeness signals
+            const hasExternalLinks = doc.querySelectorAll('a[href^="http"]').length > 3;
+            const hasMediaMentions = /\b(as seen in|as featured|featured in|mentioned in|press|media|coverage|appeared in|quoted in|recognized by)\b/i.test(bodyText);
+            const hasAwards = /\b(award|winner|finalist|recognized|honored|accolade|distinction|top\s+\d+|best\s+of|industry leader)\b/i.test(bodyText);
+            const hasPartnerLogos = !!doc.querySelector('.partners, .clients, .trusted-by, .as-seen, [class*="logo-grid"], [class*="partner"]');
+
+            // Trust signals
+            const hasContactInfo = /\b(contact|email|phone|telephone|address|support)\b/i.test(bodyText) || !!doc.querySelector('a[href^="mailto:"], a[href^="tel:"]');
+            const hasPrivacyPolicy = !!doc.querySelector('a[href*="privacy"]');
+            const hasTerms = !!doc.querySelector('a[href*="terms"], a[href*="tos"]');
+            const hasAboutPage = !!doc.querySelector('a[href*="about"]');
+            const hasSecureConnection = true;
+            const hasCustomerReviews = !!doc.querySelector('[itemprop="review"], [itemprop="aggregateRating"], .reviews, .review-section, .star-rating') ||
+                /\b(customer reviews?|user reviews?|ratings?|testimonials?)\b/i.test(bodyText);
+
+            return {
+                experience: {
+                    hasAuthorInfo, hasDateInfo, hasPracticalExamples, hasCaseStudies, hasTestimonials,
+                    score: (hasAuthorInfo ? 20 : 0) + (hasDateInfo ? 20 : 0) + (hasPracticalExamples ? 20 : 0) + (hasCaseStudies ? 20 : 0) + (hasTestimonials ? 20 : 0)
+                },
+                expertise: {
+                    hasCredentials, hasDepth, hasSchemaOrg, hasAuthorAttribution, hasCitationsToSources,
+                    score: (hasCredentials ? 20 : 0) + (hasDepth ? 20 : 0) + (hasSchemaOrg ? 20 : 0) + (hasAuthorAttribution ? 20 : 0) + (hasCitationsToSources ? 20 : 0)
+                },
+                authoritativeness: {
+                    hasExternalLinks, hasMediaMentions, hasAwards, hasPartnerLogos,
+                    score: (hasExternalLinks ? 25 : 0) + (hasMediaMentions ? 25 : 0) + (hasAwards ? 25 : 0) + (hasPartnerLogos ? 25 : 0)
+                },
+                trust: {
+                    hasContactInfo, hasPrivacyPolicy, hasTerms, hasAboutPage, hasSecureConnection, hasCustomerReviews,
+                    score: (hasContactInfo ? 20 : 0) + (hasPrivacyPolicy ? 20 : 0) + (hasAboutPage ? 15 : 0) + (hasTerms ? 15 : 0) + (hasSecureConnection ? 10 : 0) + (hasCustomerReviews ? 20 : 0)
+                }
+            };
+        }
+
+        function analyzeAccessibility(doc, html) {
+            const hasLang = !!doc.documentElement?.getAttribute('lang');
+            const langValue = doc.documentElement?.getAttribute('lang') || '';
+            const hasSkipNav = !!doc.querySelector('a[href="#main-content"], a[href="#content"], a[href="#main"], .skip-nav, .skip-link, .skip-to-content');
+            const hasMainLandmark = !!doc.querySelector('main, [role="main"]');
+            const hasNavLandmark = !!doc.querySelector('nav, [role="navigation"]');
+            const hasHeaderLandmark = !!doc.querySelector('header, [role="banner"]');
+            const hasFooterLandmark = !!doc.querySelector('footer, [role="contentinfo"]');
+            const landmarkCount = [hasMainLandmark, hasNavLandmark, hasHeaderLandmark, hasFooterLandmark].filter(Boolean).length;
+
+            const inputs = doc.querySelectorAll('input:not([type="hidden"]):not([type="submit"]):not([type="button"]), textarea, select');
+            const inputsWithLabels = Array.from(inputs).filter(input => {
+                const id = input.getAttribute('id');
+                return input.getAttribute('aria-label') || input.getAttribute('aria-labelledby') || (id && doc.querySelector(`label[for="${id}"]`)) || input.closest('label');
+            });
+            const formLabelCoverage = inputs.length > 0 ? Math.round(inputsWithLabels.length / inputs.length * 100) : 100;
+
+            const ariaElements = doc.querySelectorAll('[aria-label], [aria-labelledby], [aria-describedby], [role]');
+            const images = doc.querySelectorAll('img');
+            const imagesWithAlt = Array.from(images).filter(img => img.hasAttribute('alt'));
+            const altCoverage = images.length > 0 ? Math.round(imagesWithAlt.length / images.length * 100) : 100;
+
+            const hasFocusStyles = /(:focus|:focus-visible|outline)/.test(html);
+            const hasTabindex = doc.querySelectorAll('[tabindex]').length > 0;
+            const semanticElements = doc.querySelectorAll('article, aside, details, figcaption, figure, main, mark, nav, section, summary, time');
+            const hasSemanticHTML = semanticElements.length >= 2;
+
+            return {
+                language: { hasLang, value: langValue },
+                skipNav: { exists: hasSkipNav },
+                landmarks: { main: hasMainLandmark, nav: hasNavLandmark, header: hasHeaderLandmark, footer: hasFooterLandmark, count: landmarkCount },
+                formLabels: { total: inputs.length, labeled: inputsWithLabels.length, coverage: formLabelCoverage },
+                ariaUsage: { count: ariaElements.length },
+                imageAlt: { total: images.length, withAlt: imagesWithAlt.length, coverage: altCoverage },
+                focusManagement: { hasFocusStyles, hasTabindex },
+                semanticHTML: { hasSemanticHTML, count: semanticElements.length }
+            };
+        }
+
+        function analyzeSocialSEO(doc, html) {
+            const og = {
+                title: doc.querySelector('meta[property="og:title"]')?.getAttribute('content') || '',
+                description: doc.querySelector('meta[property="og:description"]')?.getAttribute('content') || '',
+                image: doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || '',
+                url: doc.querySelector('meta[property="og:url"]')?.getAttribute('content') || '',
+                type: doc.querySelector('meta[property="og:type"]')?.getAttribute('content') || '',
+                siteName: doc.querySelector('meta[property="og:site_name"]')?.getAttribute('content') || ''
+            };
+            const ogComplete = !!(og.title && og.description && og.image && og.url);
+            const ogFields = [og.title, og.description, og.image, og.url, og.type, og.siteName].filter(Boolean).length;
+
+            const tw = {
+                card: doc.querySelector('meta[name="twitter:card"]')?.getAttribute('content') || '',
+                title: doc.querySelector('meta[name="twitter:title"]')?.getAttribute('content') || '',
+                description: doc.querySelector('meta[name="twitter:description"]')?.getAttribute('content') || '',
+                image: doc.querySelector('meta[name="twitter:image"]')?.getAttribute('content') || '',
+                site: doc.querySelector('meta[name="twitter:site"]')?.getAttribute('content') || '',
+                creator: doc.querySelector('meta[name="twitter:creator"]')?.getAttribute('content') || ''
+            };
+            const twComplete = !!(tw.card && tw.title && tw.description && tw.image);
+            const twFields = [tw.card, tw.title, tw.description, tw.image, tw.site, tw.creator].filter(Boolean).length;
+
+            return {
+                openGraph: { ...og, complete: ogComplete, fieldsPresent: ogFields, totalFields: 6 },
+                twitterCard: { ...tw, complete: twComplete, fieldsPresent: twFields, totalFields: 6 },
+                overallCompleteness: Math.round(((ogFields + twFields) / 12) * 100)
+            };
+        }
+
+        function analyzeTechnical(doc, html) {
+            const hasViewport = !!doc.querySelector('meta[name="viewport"]');
+            const hasCharset = !!doc.querySelector('meta[charset]') || /charset=/i.test(html.substring(0, 2000));
+            const hasLang = !!doc.documentElement?.getAttribute('lang');
+            const hasRobotsMeta = !!doc.querySelector('meta[name="robots"]');
+            const robotsContent = doc.querySelector('meta[name="robots"]')?.getAttribute('content') || '';
+            const hasCanonical = !!doc.querySelector('link[rel="canonical"]');
+            const hasHreflang = doc.querySelectorAll('link[rel="alternate"][hreflang]').length > 0;
+            const hreflangCount = doc.querySelectorAll('link[rel="alternate"][hreflang]').length;
+            const hasSitemapLink = !!doc.querySelector('link[rel="sitemap"]');
+            const hasManifest = !!doc.querySelector('link[rel="manifest"]');
+            const hasFavicon = !!doc.querySelector('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"]');
+
+            const scripts = doc.querySelectorAll('script[src]');
+            const asyncScripts = doc.querySelectorAll('script[async], script[defer]');
+            const scriptOptimization = scripts.length > 0 ? Math.round(asyncScripts.length / scripts.length * 100) : 100;
+
+            const hasPreload = doc.querySelectorAll('link[rel="preload"]').length > 0;
+            const hasPreconnect = doc.querySelectorAll('link[rel="preconnect"], link[rel="dns-prefetch"]').length > 0;
+            const allImages = doc.querySelectorAll('img');
+            const lazyImages = doc.querySelectorAll('img[loading="lazy"]').length;
+            const totalImages = allImages.length;
+            const imagesWithDimensions = Array.from(allImages).filter(img => img.getAttribute('width') && img.getAttribute('height')).length;
+            const imageDimensionCoverage = totalImages > 0 ? Math.round(imagesWithDimensions / totalImages * 100) : 100;
+
+            const schemaScripts = doc.querySelectorAll('script[type="application/ld+json"]');
+            let schemaTypes = [];
+            schemaScripts.forEach(s => { try { const j = JSON.parse(s.textContent); if (j['@type']) schemaTypes.push(j['@type']); if (j['@graph']) j['@graph'].forEach(g => { if (g['@type']) schemaTypes.push(g['@type']); }); } catch {} });
+
+            const hasCSPMeta = !!doc.querySelector('meta[http-equiv="Content-Security-Policy"]');
+
+            return {
+                mobile: { hasViewport, score: hasViewport ? 100 : 0 },
+                encoding: { hasCharset, hasLang, score: (hasCharset ? 50 : 0) + (hasLang ? 50 : 0) },
+                robots: { hasMeta: hasRobotsMeta, content: robotsContent },
+                canonical: { exists: hasCanonical },
+                hreflang: { exists: hasHreflang, count: hreflangCount },
+                sitemap: { hasLink: hasSitemapLink },
+                manifest: { exists: hasManifest },
+                favicon: { exists: hasFavicon },
+                scripts: { total: scripts.length, optimized: asyncScripts.length, percentage: scriptOptimization },
+                performance: { hasPreload, hasPreconnect, lazyImages, totalImages, imagesWithDimensions, imageDimensionCoverage },
+                structuredData: { count: schemaScripts.length, types: schemaTypes },
+                security: { hasCSPMeta }
+            };
+        }
+
+        /* ====================================================================
+           SCORING
+           ==================================================================== */
+        function calculateScores(a) {
+            // On-Page (100 pts)
+            let onpage = 0;
+            if (a.onpage.title.exists) onpage += a.onpage.title.optimal ? 12 : 6;
+            if (a.onpage.metaDescription.exists) onpage += a.onpage.metaDescription.optimal ? 12 : 6;
+            if (a.onpage.headings.hasHierarchy) onpage += 12;
+            else if (a.onpage.headings.h1.count === 1) onpage += 6;
+            if (a.onpage.images.altCoverage >= 90) onpage += 10;
+            else if (a.onpage.images.altCoverage >= 50) onpage += 5;
+            if (a.onpage.images.dimensionCoverage >= 80) onpage += 8;
+            else if (a.onpage.images.dimensionCoverage >= 40) onpage += 4;
+            if (a.onpage.canonical.exists) onpage += 8;
+            if (a.onpage.content.sufficient) onpage += 8;
+            if (a.onpage.content.wordCount >= 1000) onpage += 5;
+            if (a.onpage.links.internal > 0) onpage += 5;
+            if (a.onpage.links.external > 0) onpage += 5;
+            if (a.onpage.links.descriptiveAnchorCoverage >= 80) onpage += 5;
+            if (a.onpage.urlSlug.clean) onpage += 5;
+            onpage += Math.min(5, a.onpage.headings.totalHeadings);
+
+            // GEO (100 pts)
+            let geo = 0;
+            if (a.geo.directAnswer.hasEarlyAnswer) geo += 10;
+            if (a.geo.faqCoverage.hasFAQSchema) geo += 12;
+            else if (a.geo.faqCoverage.hasQAPattern) geo += 6;
+            if (a.geo.dataTables.tableCount > 0) geo += 8;
+            if (a.geo.dataTables.listCount > 2) geo += 5;
+            if (a.geo.schemaMarkup.schemaCount > 0) geo += 12;
+            if (a.geo.schemaMarkup.schemaCount > 2) geo += 3;
+            if (a.geo.originalData.hasStatistics) geo += 8;
+            if (a.geo.summaryBox.hasTakeaways) geo += 8;
+            if (a.geo.comparisons.hasComparisons) geo += 4;
+            if (a.geo.stepByStep.hasStepByStep) geo += 4;
+            if (a.geo.faqCoverage.questionCount >= 3) geo += 4;
+            // New quotability & citation checks
+            if (a.geo.contentQuotability.hasPullQuotes) geo += 6;
+            if (a.geo.contentQuotability.hasShortQuotableContent) geo += 6;
+            if (a.geo.contentQuotability.longParagraphs < 3) geo += 4;
+            if (a.geo.citationReadiness.hasExpertQuotes) geo += 4;
+            if (a.geo.citationReadiness.hasCitedSources) geo += 2;
+
+            // CORE (100 pts)
+            let core = Math.round(a.core.contextualClarity.score * 0.25 + a.core.organization.score * 0.25 + a.core.referenceability.score * 0.25 + a.core.exclusivity.score * 0.25);
+
+            // E-E-A-T (100 pts)
+            let eeat = Math.round(a.eeat.experience.score * 0.25 + a.eeat.expertise.score * 0.25 + a.eeat.authoritativeness.score * 0.25 + a.eeat.trust.score * 0.25);
+
+            // Accessibility (100 pts)
+            let acc = 0;
+            if (a.accessibility.language.hasLang) acc += 15;
+            if (a.accessibility.skipNav.exists) acc += 10;
+            if (a.accessibility.landmarks.count >= 3) acc += 15;
+            else acc += a.accessibility.landmarks.count * 4;
+            if (a.accessibility.imageAlt.coverage >= 90) acc += 15;
+            else acc += Math.round(a.accessibility.imageAlt.coverage * 0.15);
+            if (a.accessibility.formLabels.coverage >= 90) acc += 10;
+            if (a.accessibility.ariaUsage.count > 0) acc += 10;
+            if (a.accessibility.focusManagement.hasFocusStyles) acc += 10;
+            if (a.accessibility.semanticHTML.hasSemanticHTML) acc += 15;
+
+            // Social SEO (100 pts)
+            let social = Math.round(a.social.overallCompleteness);
+
+            // Technical (100 pts)
+            let tech = 0;
+            if (a.technical.mobile.hasViewport) tech += 12;
+            if (a.technical.encoding.hasCharset) tech += 7;
+            if (a.technical.encoding.hasLang) tech += 6;
+            if (a.technical.canonical.exists) tech += 8;
+            if (a.technical.favicon.exists) tech += 5;
+            if (a.technical.structuredData.count > 0) tech += 10;
+            if (a.technical.performance.hasPreload || a.technical.performance.hasPreconnect) tech += 6;
+            if (a.technical.scripts.percentage >= 50) tech += 7;
+            if (a.technical.performance.lazyImages > 0) tech += 4;
+            if (a.technical.performance.imageDimensionCoverage >= 80) tech += 8;
+            else if (a.technical.performance.imageDimensionCoverage >= 40) tech += 4;
+            if (a.technical.robots.hasMeta) tech += 4;
+            if (a.technical.hreflang.exists) tech += 5;
+            if (a.technical.manifest.exists) tech += 4;
+            if (a.technical.security.hasCSPMeta) tech += 4;
+            if (a.technical.sitemap.hasLink) tech += 5;
+
+            // Weight: on-page and GEO slightly higher
+            const overall = Math.round((onpage * 1.1 + geo * 1.1 + core + eeat + acc * 0.9 + social * 0.9 + tech) / 7);
+
+            return {
+                overall: clamp(overall), onpage: clamp(onpage), geo: clamp(geo), core: clamp(core),
+                eeat: clamp(eeat), accessibility: clamp(acc), social: clamp(social), technical: clamp(tech)
+            };
+        }
+
+        function clamp(v) { return Math.min(100, Math.max(0, Math.round(v))); }
+
+        /* ====================================================================
+           ACTION ITEMS GENERATOR
+           ==================================================================== */
+        function generateActionItems(a) {
+            const items = [];
+            const add = (priority, category, action, instruction) => items.push({ priority, category, action, llmInstruction: instruction });
+
+            // ── ON-PAGE SEO ──
+            if (!a.onpage.title.exists) add('critical', 'On-Page SEO', 'Add a title tag', 'Add a descriptive <title> tag between 30–60 characters that includes the primary keyword.');
+            if (!a.onpage.metaDescription.exists) add('critical', 'On-Page SEO', 'Add a meta description', 'Add <meta name="description"> with 120–160 characters including the primary keyword and a compelling CTA.');
+            if (a.onpage.headings.h1.count === 0) add('critical', 'On-Page SEO', 'Add an H1 heading', 'Add exactly one <h1> containing the primary keyword. Every page must have one and only one H1.');
+            if (a.onpage.headings.h1.count > 1) add('critical', 'On-Page SEO', `Fix multiple H1 tags (${a.onpage.headings.h1.count} found)`, 'Reduce to exactly one H1 per page. Convert extra H1s to H2 or H3 tags.');
+
+            if (a.onpage.title.exists && !a.onpage.title.optimal) add('low', 'On-Page SEO', `Shorten your title to 30–60 characters (currently ${a.onpage.title.length})`, 'Shorten your title to 30–60 characters to prevent truncation in search results while retaining the primary keyword.');
+            if (a.onpage.metaDescription.exists && !a.onpage.metaDescription.optimal) add('low', 'On-Page SEO', `Optimize meta description to 120–160 characters (currently ${a.onpage.metaDescription.length})`, 'Shorten your meta description to 120–160 characters with a clear value proposition and CTA.');
+            if (a.onpage.images.withoutAlt > 0) add('low', 'On-Page SEO', `Image Optimization: Add descriptive alt text to ${a.onpage.images.withoutAlt} image(s)`, 'Add descriptive alt attributes to all images missing alt text. Describe the image content, keep under 125 characters.');
+            if (a.onpage.images.withoutDimensions > 0) add('low', 'On-Page SEO', `Image Optimization: Add width and height attributes to ${a.onpage.images.withoutDimensions} image(s)`, 'Add width and height attributes to prevent layout shift (CLS). This improves Core Web Vitals scores.');
+            if (a.onpage.links.genericAnchors > 0) add('low', 'On-Page SEO', `Link Analysis: Add descriptive text to ${a.onpage.links.genericAnchors} link anchor(s)`, 'Replace generic anchor text like "click here" or "read more" with descriptive, keyword-rich link text.');
+
+            // ── SOCIAL SEO — individual Twitter Card tags ──
+            if (!a.social.twitterCard.card) add('critical', 'Social SEO', 'Twitter Card: Add twitter:card meta tag (summary, summary_large_image, etc.)', 'Add twitter:card meta tag (summary, summary_large_image, etc.)');
+            if (!a.social.twitterCard.title) add('critical', 'Social SEO', 'Twitter Card: Add twitter:title meta tag', 'Add twitter:title meta tag for better visibility when shared on X/Twitter.');
+            if (!a.social.twitterCard.description) add('critical', 'Social SEO', 'Twitter Card: Add twitter:description meta tag', 'Add twitter:description meta tag. Keep between 120–200 characters.');
+            if (!a.social.twitterCard.image) add('critical', 'Social SEO', 'Twitter Card: Add twitter:image meta tag for better visibility', 'Add twitter:image meta tag for better visibility when shared. Use a 2:1 aspect ratio, minimum 300×157px.');
+            if (!a.social.openGraph.title) add('high', 'Social SEO', 'Open Graph: Add og:title meta tag', 'Add <meta property="og:title"> for rich previews on Facebook, LinkedIn, and other platforms.');
+            if (!a.social.openGraph.description) add('high', 'Social SEO', 'Open Graph: Add og:description meta tag', 'Add <meta property="og:description"> with 120–160 characters describing the page.');
+            if (!a.social.openGraph.image) add('low', 'Social SEO', 'Open Graph: Add missing Open Graph tags: og:image', 'Add missing Open Graph tags: og:image. Use at least 1200×630px for optimal display.');
+            if (!a.social.openGraph.url) add('low', 'Social SEO', 'Open Graph: Add og:url meta tag', 'Add <meta property="og:url"> pointing to the canonical URL of the page.');
+
+            // ── GEO — AI Engine Optimization ──
+            if (!a.geo.schemaMarkup.hasFAQSchema) add('critical', 'GEO', 'FAQ Schema: Add FAQPage structured data for better AI visibility', 'Add FAQPage structured data for better AI visibility. Use JSON-LD with @type: "FAQPage" and mainEntity array.');
+            if (a.geo.schemaMarkup.schemaCount === 0) add('critical', 'GEO', 'Schema.org: Add structured data (JSON-LD) to help AI engines understand your content', 'Add structured data (JSON-LD) to help AI engines understand your content. Start with Organization, WebSite, or Article schema.');
+            if (!a.geo.contentQuotability.hasPullQuotes) add('critical', 'GEO', 'Content Quotability: Add pull quotes or highlighted key takeaways', 'Add pull quotes or highlighted key takeaways. Use <blockquote> or styled callout boxes that AI can extract.');
+            if (a.geo.contentQuotability.longParagraphs > 2) add('critical', 'GEO', `Content Quotability: Break ${a.geo.contentQuotability.longParagraphs} long paragraphs into shorter, more quotable chunks`, 'Break long paragraphs into shorter, more quotable chunks. Aim for 40–200 characters per paragraph for AI citation.');
+            if (a.geo.dataTables.tableCount === 0) add('critical', 'GEO', 'Table Structure: Consider adding tables for structured data comparison', 'Consider adding tables for structured data comparison. Tables are highly valuable for AI answer extraction.');
+            if (a.geo.dataTables.tableCount === 0 && a.geo.comparisons.hasComparisons) add('critical', 'GEO', 'Table Structure: Tables are highly valuable for AI answer extraction', 'Tables are highly valuable for AI answer extraction. Convert comparison text into HTML <table> elements.');
+            if (!a.geo.citationReadiness.hasExpertQuotes) add('high', 'GEO', 'Citation Readiness: Add expert quotes or citations', 'Add expert quotes or citations. Use <blockquote> with attribution for AI engines to cite.');
+            if (!a.geo.citationReadiness.hasShortQuotableContent) add('high', 'GEO', 'Citation Readiness: Add more concise, quotable paragraphs (40–200 characters)', 'Add more concise, quotable paragraphs (40–200 characters). AI engines prefer self-contained, factual statements.');
+            if (!a.geo.summaryBox.hasTakeaways) add('medium', 'GEO', 'Add a Key Takeaways or summary section', 'Add a "Key Takeaways" section with 3–5 bullet points near the top or bottom of your content.');
+            if (!a.geo.originalData.hasStatistics) add('medium', 'GEO', 'Add original data, statistics, or research findings', 'Include specific statistics, survey results, or original research that AI systems can cite.');
+            if (!a.geo.comparisons.hasComparisons) add('low', 'GEO', 'Add comparison content for "vs" queries', 'AI engines frequently answer comparison queries. Add "vs" sections or comparison tables.');
+
+            // ── CORE — Content Quality ──
+            if (!a.core.organization.hasTOC) add('critical', 'CORE', 'Organization: Add a table of contents for long-form content', 'Add a table of contents for long-form content. Use anchor links to H2/H3 headings.');
+            if (!a.core.contextualClarity.hasIntroduction) add('critical', 'CORE', 'Organization: Add a clear introduction explaining what the content covers', 'Add a clear introduction explaining what the content covers. The first paragraph should set reader expectations.');
+            if (!a.core.organization.hasConclusion) add('critical', 'CORE', 'Organization: Add a conclusion or summary section', 'Add a conclusion or summary section. Wrap up key points and provide next steps or a CTA.');
+            if (!a.core.referenceability.hasCitations) add('critical', 'CORE', 'Referenceability: Add citations to authoritative sources', 'Add citations to authoritative sources. Link to studies, reports, or recognized industry references.');
+            if (!a.core.referenceability.hasAuthorInfo) add('critical', 'CORE', 'Referenceability: Add author information to increase credibility', 'Add author information to increase credibility. Include name, credentials, and a link to an author bio page.');
+            if (!a.core.exclusivity.hasUniqueData) add('critical', 'CORE', 'Exclusivity: Add original research, data, or insights', 'Add original research, data, or insights. Content with unique data gets cited more by AI and other publishers.');
+            if (!a.core.exclusivity.hasCaseStudies) add('critical', 'CORE', 'Exclusivity: Include case studies or real-world examples', 'Include case studies or real-world examples. These demonstrate practical application and increase content value.');
+            if (!a.core.exclusivity.hasExpertTips) add('critical', 'CORE', 'Exclusivity: Add expert tips or insider insights', 'Add expert tips or insider insights. Share unique knowledge that readers can\'t find elsewhere.');
+            if (!a.core.exclusivity.hasUniqueHighlight) add('critical', 'CORE', 'Exclusivity: Highlight what makes your content unique', 'Highlight what makes your content unique. Use phrases like "our approach", "our findings", "we discovered".');
+
+            // ── E-E-A-T ──
+            if (!a.eeat.experience.hasPracticalExamples) add('critical', 'E-E-A-T', 'Experience: Include practical, real-world examples', 'Include practical, real-world examples. Use "for example", "in practice", "our experience" to demonstrate hands-on knowledge.');
+            if (!a.eeat.experience.hasCaseStudies) add('critical', 'E-E-A-T', 'Experience: Add case studies demonstrating real-world application', 'Add case studies demonstrating real-world application. Include measurable results and specific outcomes.');
+            if (!a.eeat.experience.hasTestimonials) add('critical', 'E-E-A-T', 'Experience: Include testimonials or user feedback', 'Include testimonials or user feedback. Social proof builds credibility with both users and search engines.');
+            if (!a.eeat.expertise.hasAuthorAttribution) add('critical', 'E-E-A-T', 'Expertise: Add author attribution to your content', 'Add author attribution to your content. Include name, photo, credentials, and a brief bio.');
+            if (!a.eeat.expertise.hasCitationsToSources) add('critical', 'E-E-A-T', 'Expertise: Add citations to authoritative sources', 'Add citations to authoritative sources. Reference studies, industry reports, or recognized experts.');
+            if (!a.eeat.authoritativeness.hasMediaMentions) add('critical', 'E-E-A-T', 'Authoritativeness: Add media mentions or "as seen in" indicators', 'Add media mentions or "as seen in" indicators. If featured in press, display logos and links.');
+            if (!a.eeat.authoritativeness.hasAwards) add('critical', 'E-E-A-T', 'Authoritativeness: Highlight any awards or industry recognition', 'Highlight any awards or industry recognition. Display badges, certifications, and industry rankings.');
+            if (!a.eeat.trust.hasTerms) add('medium', 'E-E-A-T', 'Trust: Add terms of service link', 'Add terms of service link in the footer. This is a standard trust signal for users and search engines.');
+            if (!a.eeat.trust.hasCustomerReviews) add('medium', 'E-E-A-T', 'Trust: Add customer reviews or testimonials', 'Add customer reviews or testimonials with schema markup. Use AggregateRating or Review schema.');
+            if (!a.eeat.experience.hasAuthorInfo) add('medium', 'E-E-A-T', 'Add author byline with credentials', 'Add an author byline with name and credentials. Link to an author bio page.');
+            if (!a.eeat.experience.hasDateInfo) add('medium', 'E-E-A-T', 'Add publication and last-updated dates', 'Add visible publication and last-updated dates using <time> elements with datetime attributes.');
+            if (!a.eeat.trust.hasPrivacyPolicy) add('medium', 'E-E-A-T', 'Trust: Add privacy policy link', 'Add a link to a privacy policy page in the footer.');
+            if (!a.eeat.trust.hasContactInfo) add('medium', 'E-E-A-T', 'Trust: Add contact information', 'Add visible contact details: email address, phone number, or physical address.');
+
+            // ── TECHNICAL SEO ──
+            if (a.geo.schemaMarkup.schemaCount === 0) add('critical', 'Technical SEO', 'Structured Data: Add JSON-LD structured data to your page', 'Add JSON-LD structured data to your page. Start with Organization, WebSite, BreadcrumbList, or Article schema.');
+            if (a.technical.scripts.percentage < 50 && a.technical.scripts.total > 0) add('high', 'Technical SEO', `Performance: Add async or defer to non-critical scripts (${a.technical.scripts.percentage}% optimized)`, 'Add async or defer to non-critical scripts. This improves page load time and Core Web Vitals.');
+            if (a.technical.performance.imageDimensionCoverage < 80 && a.technical.performance.totalImages > 0) add('high', 'Technical SEO', `Performance: Add width and height to all images to prevent CLS`, 'Add width and height to all images to prevent CLS (Cumulative Layout Shift). This is a Core Web Vital.');
+            if (!a.onpage.canonical.exists) add('medium', 'Technical SEO', 'Add canonical URL tag', 'Add <link rel="canonical" href="..."> to prevent duplicate content penalties.');
+            if (!a.technical.mobile.hasViewport) add('medium', 'Technical SEO', 'Add viewport meta tag', 'Add <meta name="viewport" content="width=device-width, initial-scale=1.0"> for mobile responsiveness.');
+            if (!a.technical.favicon.exists) add('medium', 'Technical SEO', 'Add a favicon', 'Add <link rel="icon" href="/favicon.ico"> and apple-touch-icon for mobile bookmarks.');
+            if (!a.technical.performance.hasPreload && !a.technical.performance.hasPreconnect) add('low', 'Technical SEO', 'Add resource hints (preload/preconnect)', 'Add <link rel="preconnect"> for third-party domains and <link rel="preload"> for critical assets to improve loading speed.');
+            if (!a.technical.manifest.exists) add('low', 'Technical SEO', 'Add web app manifest', 'Add <link rel="manifest" href="/manifest.json"> for PWA capabilities and mobile install support.');
+
+            // ── ACCESSIBILITY ──
+            if (!a.accessibility.language.hasLang) add('critical', 'Accessibility', 'Add lang attribute to <html> element', 'Add lang="en" (or appropriate code) to <html>. Required by WCAG 3.1.1 for screen readers.');
+            if (!a.accessibility.skipNav.exists) add('high', 'Accessibility', 'Add skip navigation link', 'Add <a href="#main-content" class="skip-nav">Skip to main content</a> as first child of <body>. WCAG 2.4.1.');
+            if (a.accessibility.landmarks.count < 3) add('high', 'Accessibility', 'Add ARIA landmarks', 'Use semantic elements: <header>, <nav>, <main>, <footer>. Screen readers use these to navigate.');
+            if (a.accessibility.formLabels.coverage < 90 && a.accessibility.formLabels.total > 0) add('medium', 'Accessibility', 'Add labels to form inputs', 'Ensure every <input>, <select>, and <textarea> has an associated <label> or aria-label.');
+            if (!a.accessibility.semanticHTML.hasSemanticHTML) add('medium', 'Accessibility', 'Use semantic HTML elements', 'Replace generic <div> wrappers with <article>, <section>, <nav>, <aside>, <figure>, <time>.');
+            if (!a.onpage.headings.hasHierarchy) add('medium', 'Accessibility', 'Fix heading hierarchy', 'Structure with one H1, then H2s for sections, H3s for subsections. Proper hierarchy helps screen readers.');
+
+            // ── CONTENT ──
+            if (a.onpage.content.wordCount < 300) add('low', 'Content', `Expand content (${a.onpage.content.wordCount} words)`, 'Expand to at least 300–500 words of substantive content on the topic.');
+
+            return items;
+        }
+
+        /* ====================================================================
+           LLM PROMPT GENERATOR
+           ==================================================================== */
+        function generateLLMPrompt(a) {
+            let domain = ''; try { domain = new URL(a.url).hostname; } catch {}
+            let p = `# SEO & GEO Improvement Task\n\n`;
+            p += `## Target: ${a.url}\n## Domain: ${domain}\n## Analysis Date: ${new Date(a.timestamp).toLocaleString()}\n\n`;
+            p += `## Current Scores\n`;
+            Object.entries(a.scores).forEach(([k, v]) => { p += `- ${k.charAt(0).toUpperCase() + k.slice(1)}: ${v}/100\n`; });
+            p += `\n## Required Improvements\n\n`;
+
+            const groups = { critical: [], high: [], medium: [], low: [] };
+            a.actionItems.forEach(item => groups[item.priority].push(item));
+
+            for (const [level, label] of [['critical', 'CRITICAL — Fix Immediately'], ['high', 'HIGH PRIORITY'], ['medium', 'MEDIUM PRIORITY'], ['low', 'LOW PRIORITY']]) {
+                if (groups[level].length > 0) {
+                    p += `### ${label}\n`;
+                    groups[level].forEach((item, i) => { p += `${i + 1}. **${item.action}** [${item.category}]\n   ${item.llmInstruction}\n\n`; });
+                }
+            }
+
+            p += `## Instructions\nPlease implement all improvements listed above. Provide the complete updated HTML with all changes applied. Prioritize critical items first.\n`;
+            return p;
+        }
+
+        /* ====================================================================
+           DISPLAY RESULTS
+           ==================================================================== */
+        function displayResults(a) {
+            hideLoading();
+            $('#results-section').classList.remove('hidden');
+            $('#error-section').classList.add('hidden');
+
+            // Overall score
+            $('#analyzed-url').textContent = a.url;
+            $('#analyzed-timestamp').textContent = `Analyzed: ${new Date(a.timestamp).toLocaleString()}`;
+            const overallEl = $('#overall-score');
+            overallEl.textContent = a.scores.overall;
+            overallEl.className = 'score-ring ' + scoreClass(a.scores.overall);
+
+            // Score grid
+            const scoreOrder = ['onpage', 'geo', 'core', 'eeat', 'accessibility', 'social', 'technical'];
+            $('#scores-grid').innerHTML = scoreOrder.map(key => {
+                const meta = SECTION_META[key];
+                return `<div class="score-card">
+                    <div class="score-value" style="color:${meta.color};">${a.scores[key]}<span style="font-size:0.875rem;font-weight:400;">/100</span></div>
+                    <div class="score-label">${meta.icon} ${meta.title}</div>
+                </div>`;
+            }).join('');
+
+            // Action items
+            const sortedItems = [...a.actionItems].sort((x, y) => ({ critical: 0, high: 1, medium: 2, low: 3 })[x.priority] - ({ critical: 0, high: 1, medium: 2, low: 3 })[y.priority]);
+            $('#action-count-badge').textContent = `${sortedItems.length} item${sortedItems.length !== 1 ? 's' : ''}`;
+            $('#action-items-container').innerHTML = sortedItems.length === 0
+                ? '<p style="color:var(--color-success);font-weight:600;">All checks passed — your page is well optimized.</p>'
+                : sortedItems.map((item, i) => `<div class="action-item action-${item.priority}" role="listitem">
+                    <div class="flex items-center gap-1 flex-wrap">
+                        <span class="badge badge-${item.priority}">${item.priority}</span>
+                        <span style="font-size:0.75rem;color:var(--text-muted);">${item.category}</span>
+                    </div>
+                    <h4 style="font-weight:600;margin:0.375rem 0 0.25rem;font-size:0.9375rem;color:var(--text-primary);">${i + 1}. ${item.action}</h4>
+                    <p style="font-size:0.8125rem;color:var(--text-secondary);margin:0;line-height:1.5;">${item.llmInstruction}</p>
+                </div>`).join('');
+
+            // Detail sections
+            $('#detail-sections').innerHTML = renderAllDetailSections(a);
+
+            // LLM prompt
+            $('#llm-prompt').textContent = a.llmPrompt;
+        }
+
+        function renderAllDetailSections(a) {
+            let html = '';
+            const sections = [
+                { key: 'onpage', render: renderOnPage },
+                { key: 'geo', render: renderGEO },
+                { key: 'core', render: renderCORE },
+                { key: 'eeat', render: renderEEAT },
+                { key: 'accessibility', render: renderAccessibility },
+                { key: 'social', render: renderSocial },
+                { key: 'technical', render: renderTechnical }
+            ];
+            sections.forEach(sec => {
+                const meta = SECTION_META[sec.key];
+                const score = a.scores[sec.key];
+                html += `<details class="section-collapse" open>
+                    <summary>
+                        <span class="section-title">${meta.icon} ${meta.title}</span>
+                        <span class="score-badge" style="background:${scoreColor(score)};">${score}/100</span>
+                    </summary>
+                    <div class="section-body">
+                        <p class="section-desc">${meta.desc}</p>
+                        ${sec.render(a)}
+                    </div>
+                </details>`;
+            });
+            return html;
+        }
+
+        function M(label, value, status) {
+            const icons = { pass: '✓', warn: '⚠', fail: '✗', info: 'ℹ' };
+            return `<div class="metric-row">
+                <span class="metric-label">${label}</span>
+                <span class="metric-value"><span class="icon-${status}" aria-hidden="true">${icons[status]}</span> ${value}</span>
+            </div>`;
+        }
+
+        function renderOnPage(a) {
+            const d = a.onpage;
+            return M('Title Tag', d.title.exists ? `${d.title.length} chars ${d.title.optimal ? '(optimal)' : '(sub-optimal)'}` : 'Missing', d.title.exists ? (d.title.optimal ? 'pass' : 'warn') : 'fail') +
+                M('Meta Description', d.metaDescription.exists ? `${d.metaDescription.length} chars ${d.metaDescription.optimal ? '(optimal)' : '(sub-optimal)'}` : 'Missing', d.metaDescription.exists ? (d.metaDescription.optimal ? 'pass' : 'warn') : 'fail') +
+                M('H1 Tags', `${d.headings.h1.count} found`, d.headings.h1.count === 1 ? 'pass' : 'fail') +
+                M('Heading Hierarchy', d.headings.hasHierarchy ? 'Proper structure' : `H2s: ${d.headings.h2.count}, H3s: ${d.headings.h3.count}`, d.headings.hasHierarchy ? 'pass' : 'warn') +
+                M('Image Alt Text', `${d.images.altCoverage}% coverage (${d.images.total} images)`, d.images.altCoverage >= 90 ? 'pass' : (d.images.altCoverage >= 50 ? 'warn' : 'fail')) +
+                M('Image Dimensions', `${d.images.dimensionCoverage}% have width/height`, d.images.dimensionCoverage >= 80 ? 'pass' : 'warn') +
+                M('Internal Links', `${d.links.internal} found`, d.links.internal > 0 ? 'pass' : 'warn') +
+                M('External Links', `${d.links.external} found`, d.links.external > 0 ? 'pass' : 'warn') +
+                M('Link Anchor Text', `${d.links.descriptiveAnchorCoverage}% descriptive`, d.links.descriptiveAnchorCoverage >= 80 ? 'pass' : 'warn') +
+                M('Canonical URL', d.canonical.exists ? 'Present' : 'Missing', d.canonical.exists ? 'pass' : 'warn') +
+                M('URL Structure', d.urlSlug.clean ? 'Clean' : 'Could improve', d.urlSlug.clean ? 'pass' : 'info') +
+                M('Word Count', `${d.content.wordCount} (${d.content.rating})`, d.content.sufficient ? 'pass' : 'warn');
+        }
+
+        function renderGEO(a) {
+            const d = a.geo;
+            return M('Direct Answer', d.directAnswer.hasEarlyAnswer ? 'Content starts promptly' : 'No early answer found', d.directAnswer.hasEarlyAnswer ? 'pass' : 'warn') +
+                M('FAQ Coverage', d.faqCoverage.hasFAQSchema ? 'FAQ schema present' : `${d.faqCoverage.questionCount} questions detected`, d.faqCoverage.hasFAQSchema ? 'pass' : (d.faqCoverage.hasQAPattern ? 'warn' : 'fail')) +
+                M('Data Tables', `${d.dataTables.tableCount} tables, ${d.dataTables.listCount} lists`, (d.dataTables.tableCount > 0 || d.dataTables.listCount > 2) ? 'pass' : 'warn') +
+                M('Schema Markup', d.schemaMarkup.schemaCount > 0 ? `${d.schemaMarkup.schemaCount} (${d.schemaMarkup.schemaTypes.join(', ')})` : 'None detected', d.schemaMarkup.schemaCount > 0 ? 'pass' : 'fail') +
+                M('Original Data/Stats', d.originalData.hasStatistics ? 'Statistics detected' : 'No statistics found', d.originalData.hasStatistics ? 'pass' : 'warn') +
+                M('Key Takeaways', d.summaryBox.hasTakeaways ? 'Present' : 'Not found', d.summaryBox.hasTakeaways ? 'pass' : 'warn') +
+                M('Pull Quotes/Callouts', d.contentQuotability.hasPullQuotes ? `${d.contentQuotability.pullQuoteCount} found` : 'None found', d.contentQuotability.hasPullQuotes ? 'pass' : 'fail') +
+                M('Quotable Paragraphs', `${d.contentQuotability.quotableParagraphs} of ${d.contentQuotability.totalParagraphs} (40–200 chars)`, d.contentQuotability.hasShortQuotableContent ? 'pass' : 'warn') +
+                M('Long Paragraphs', `${d.contentQuotability.longParagraphs} over 300 chars`, d.contentQuotability.longParagraphs < 3 ? 'pass' : 'warn') +
+                M('Avg Paragraph Length', `${d.contentQuotability.avgParaLength} chars`, d.contentQuotability.avgParaLength <= 250 ? 'pass' : 'warn') +
+                M('Expert Quotes/Citations', d.citationReadiness.hasExpertQuotes ? 'Found' : 'None detected', d.citationReadiness.hasExpertQuotes ? 'pass' : 'warn') +
+                M('Cited Sources', d.citationReadiness.hasCitedSources ? 'Found' : 'None detected', d.citationReadiness.hasCitedSources ? 'pass' : 'info') +
+                M('Comparison Content', d.comparisons.hasComparisons ? 'Present' : 'Not found', d.comparisons.hasComparisons ? 'pass' : 'info') +
+                M('Step-by-Step Content', d.stepByStep.hasStepByStep ? 'Present' : 'Not found', d.stepByStep.hasStepByStep ? 'pass' : 'info');
+        }
+
+        function renderCORE(a) {
+            const d = a.core;
+            return `<h4 style="font-weight:600;margin:0 0 0.5rem;font-size:0.9375rem;">Contextual Clarity — ${d.contextualClarity.score}%</h4>` +
+                M('Clear Purpose', d.contextualClarity.hasClearPurpose ? 'Detected' : 'Unclear', d.contextualClarity.hasClearPurpose ? 'pass' : 'warn') +
+                M('Structured Content', d.contextualClarity.hasStructuredContent ? 'Well-structured' : 'Needs headings', d.contextualClarity.hasStructuredContent ? 'pass' : 'warn') +
+                M('Introduction', d.contextualClarity.hasIntroduction ? 'Present' : 'Missing', d.contextualClarity.hasIntroduction ? 'pass' : 'fail') +
+                `<h4 style="font-weight:600;margin:1rem 0 0.5rem;font-size:0.9375rem;">Organization — ${d.organization.score}%</h4>` +
+                M('H2 Sections', `${d.organization.headingCount} found`, d.organization.hasSections ? 'pass' : 'warn') +
+                M('Table of Contents', d.organization.hasTOC ? 'Present' : 'Missing', d.organization.hasTOC ? 'pass' : 'fail') +
+                M('Conclusion/Summary', d.organization.hasConclusion ? 'Present' : 'Missing', d.organization.hasConclusion ? 'pass' : 'fail') +
+                `<h4 style="font-weight:600;margin:1rem 0 0.5rem;font-size:0.9375rem;">Referenceability — ${d.referenceability.score}%</h4>` +
+                M('Citations', d.referenceability.hasCitations ? 'Found' : 'None detected', d.referenceability.hasCitations ? 'pass' : 'fail') +
+                M('External Links', d.referenceability.hasExternalLinks ? 'Present' : 'Missing', d.referenceability.hasExternalLinks ? 'pass' : 'warn') +
+                M('Blockquotes', d.referenceability.hasQuotes ? 'Present' : 'None', d.referenceability.hasQuotes ? 'pass' : 'info') +
+                M('Author Info', d.referenceability.hasAuthorInfo ? 'Present' : 'Missing', d.referenceability.hasAuthorInfo ? 'pass' : 'fail') +
+                `<h4 style="font-weight:600;margin:1rem 0 0.5rem;font-size:0.9375rem;">Exclusivity — ${d.exclusivity.score}%</h4>` +
+                M('Original Data/Research', d.exclusivity.hasUniqueData ? 'Found' : 'None detected', d.exclusivity.hasUniqueData ? 'pass' : 'fail') +
+                M('Case Studies', d.exclusivity.hasCaseStudies ? 'Found' : 'None detected', d.exclusivity.hasCaseStudies ? 'pass' : 'fail') +
+                M('Expert Tips/Insights', d.exclusivity.hasExpertTips ? 'Found' : 'None detected', d.exclusivity.hasExpertTips ? 'pass' : 'fail') +
+                M('Unique Content Highlight', d.exclusivity.hasUniqueHighlight ? 'Found' : 'None detected', d.exclusivity.hasUniqueHighlight ? 'pass' : 'fail');
+        }
+
+        function renderEEAT(a) {
+            const d = a.eeat;
+            return `<h4 style="font-weight:600;margin:0 0 0.5rem;font-size:0.9375rem;">Experience — ${d.experience.score}%</h4>` +
+                M('Author Info', d.experience.hasAuthorInfo ? 'Detected' : 'Missing', d.experience.hasAuthorInfo ? 'pass' : 'fail') +
+                M('Date Information', d.experience.hasDateInfo ? 'Detected' : 'Missing', d.experience.hasDateInfo ? 'pass' : 'warn') +
+                M('Practical Examples', d.experience.hasPracticalExamples ? 'Found' : 'None detected', d.experience.hasPracticalExamples ? 'pass' : 'fail') +
+                M('Case Studies', d.experience.hasCaseStudies ? 'Found' : 'None detected', d.experience.hasCaseStudies ? 'pass' : 'fail') +
+                M('Testimonials/Reviews', d.experience.hasTestimonials ? 'Found' : 'None detected', d.experience.hasTestimonials ? 'pass' : 'fail') +
+                `<h4 style="font-weight:600;margin:1rem 0 0.5rem;font-size:0.9375rem;">Expertise — ${d.expertise.score}%</h4>` +
+                M('Credentials', d.expertise.hasCredentials ? 'Detected' : 'None found', d.expertise.hasCredentials ? 'pass' : 'warn') +
+                M('Content Depth', d.expertise.hasDepth ? '800+ words' : 'Thin content', d.expertise.hasDepth ? 'pass' : 'warn') +
+                M('Schema.org', d.expertise.hasSchemaOrg ? 'Present' : 'Missing', d.expertise.hasSchemaOrg ? 'pass' : 'fail') +
+                M('Author Attribution', d.expertise.hasAuthorAttribution ? 'Present' : 'Missing', d.expertise.hasAuthorAttribution ? 'pass' : 'fail') +
+                M('Source Citations', d.expertise.hasCitationsToSources ? 'Found' : 'None detected', d.expertise.hasCitationsToSources ? 'pass' : 'fail') +
+                `<h4 style="font-weight:600;margin:1rem 0 0.5rem;font-size:0.9375rem;">Authoritativeness — ${d.authoritativeness.score}%</h4>` +
+                M('External Links', d.authoritativeness.hasExternalLinks ? 'Present' : 'Missing', d.authoritativeness.hasExternalLinks ? 'pass' : 'warn') +
+                M('Media Mentions', d.authoritativeness.hasMediaMentions ? 'Found' : 'None detected', d.authoritativeness.hasMediaMentions ? 'pass' : 'fail') +
+                M('Awards/Recognition', d.authoritativeness.hasAwards ? 'Found' : 'None detected', d.authoritativeness.hasAwards ? 'pass' : 'fail') +
+                M('Partner/Client Logos', d.authoritativeness.hasPartnerLogos ? 'Found' : 'None detected', d.authoritativeness.hasPartnerLogos ? 'pass' : 'info') +
+                `<h4 style="font-weight:600;margin:1rem 0 0.5rem;font-size:0.9375rem;">Trustworthiness — ${d.trust.score}%</h4>` +
+                M('Contact Info', d.trust.hasContactInfo ? 'Present' : 'Missing', d.trust.hasContactInfo ? 'pass' : 'fail') +
+                M('Privacy Policy', d.trust.hasPrivacyPolicy ? 'Linked' : 'Missing', d.trust.hasPrivacyPolicy ? 'pass' : 'fail') +
+                M('Terms of Service', d.trust.hasTerms ? 'Linked' : 'Missing', d.trust.hasTerms ? 'pass' : 'warn') +
+                M('About Page', d.trust.hasAboutPage ? 'Linked' : 'Missing', d.trust.hasAboutPage ? 'pass' : 'warn') +
+                M('Customer Reviews', d.trust.hasCustomerReviews ? 'Found' : 'None detected', d.trust.hasCustomerReviews ? 'pass' : 'warn');
+        }
+
+        function renderAccessibility(a) {
+            const d = a.accessibility;
+            return M('Language Attribute', d.language.hasLang ? `Present (${d.language.value})` : 'Missing', d.language.hasLang ? 'pass' : 'fail') +
+                M('Skip Navigation', d.skipNav.exists ? 'Present' : 'Missing', d.skipNav.exists ? 'pass' : 'fail') +
+                M('ARIA Landmarks', `${d.landmarks.count}/4 (main, nav, header, footer)`, d.landmarks.count >= 3 ? 'pass' : (d.landmarks.count >= 1 ? 'warn' : 'fail')) +
+                M('Image Alt Text', `${d.imageAlt.coverage}% (${d.imageAlt.withAlt}/${d.imageAlt.total})`, d.imageAlt.coverage >= 90 ? 'pass' : (d.imageAlt.coverage >= 50 ? 'warn' : 'fail')) +
+                M('Form Labels', d.formLabels.total > 0 ? `${d.formLabels.coverage}% (${d.formLabels.labeled}/${d.formLabels.total})` : 'No forms found', d.formLabels.coverage >= 90 ? 'pass' : 'warn') +
+                M('ARIA Attributes', `${d.ariaUsage.count} elements`, d.ariaUsage.count > 0 ? 'pass' : 'warn') +
+                M('Focus Styles', d.focusManagement.hasFocusStyles ? 'Detected' : 'Not detected', d.focusManagement.hasFocusStyles ? 'pass' : 'warn') +
+                M('Semantic HTML', `${d.semanticHTML.count} elements`, d.semanticHTML.hasSemanticHTML ? 'pass' : 'warn');
+        }
+
+        function renderSocial(a) {
+            const d = a.social;
+            return `<h4 style="font-weight:600;margin:0 0 0.5rem;font-size:0.9375rem;">Open Graph (Facebook, LinkedIn)</h4>` +
+                M('og:title', d.openGraph.title || 'Missing', d.openGraph.title ? 'pass' : 'fail') +
+                M('og:description', d.openGraph.description ? `${d.openGraph.description.length} chars` : 'Missing', d.openGraph.description ? 'pass' : 'fail') +
+                M('og:image', d.openGraph.image ? 'Present' : 'Missing', d.openGraph.image ? 'pass' : 'fail') +
+                M('og:url', d.openGraph.url ? 'Present' : 'Missing', d.openGraph.url ? 'pass' : 'warn') +
+                M('og:type', d.openGraph.type || 'Missing', d.openGraph.type ? 'pass' : 'info') +
+                M('og:site_name', d.openGraph.siteName || 'Missing', d.openGraph.siteName ? 'pass' : 'info') +
+                `<h4 style="font-weight:600;margin:1rem 0 0.5rem;font-size:0.9375rem;">Twitter Card (X)</h4>` +
+                M('twitter:card', d.twitterCard.card || 'Missing', d.twitterCard.card ? 'pass' : 'fail') +
+                M('twitter:title', d.twitterCard.title ? `${d.twitterCard.title.length} chars` : 'Missing', d.twitterCard.title ? 'pass' : 'fail') +
+                M('twitter:description', d.twitterCard.description ? `${d.twitterCard.description.length} chars` : 'Missing', d.twitterCard.description ? 'pass' : 'fail') +
+                M('twitter:image', d.twitterCard.image ? 'Present' : 'Missing', d.twitterCard.image ? 'pass' : 'fail') +
+                M('twitter:site', d.twitterCard.site || 'Missing', d.twitterCard.site ? 'pass' : 'info') +
+                M('twitter:creator', d.twitterCard.creator || 'Missing', d.twitterCard.creator ? 'pass' : 'info');
+        }
+
+        function renderTechnical(a) {
+            const d = a.technical;
+            return M('Mobile Viewport', d.mobile.hasViewport ? 'Present' : 'Missing', d.mobile.hasViewport ? 'pass' : 'fail') +
+                M('Character Encoding', d.encoding.hasCharset ? 'Present' : 'Missing', d.encoding.hasCharset ? 'pass' : 'fail') +
+                M('Language Attribute', d.encoding.hasLang ? 'Present' : 'Missing', d.encoding.hasLang ? 'pass' : 'fail') +
+                M('Canonical URL', d.canonical.exists ? 'Present' : 'Missing', d.canonical.exists ? 'pass' : 'warn') +
+                M('Robots Meta', d.robots.hasMeta ? `Present (${d.robots.content})` : 'Not set', d.robots.hasMeta ? 'pass' : 'info') +
+                M('Hreflang Tags', d.hreflang.exists ? `${d.hreflang.count} found` : 'None', d.hreflang.exists ? 'pass' : 'info') +
+                M('Structured Data', d.structuredData.count > 0 ? `${d.structuredData.count} schemas (${d.structuredData.types.join(', ')})` : 'None', d.structuredData.count > 0 ? 'pass' : 'warn') +
+                M('Script Optimization', `${d.scripts.percentage}% async/defer (${d.scripts.optimized}/${d.scripts.total})`, d.scripts.percentage >= 50 ? 'pass' : 'warn') +
+                M('Resource Hints', (d.performance.hasPreload || d.performance.hasPreconnect) ? 'Present' : 'Missing', (d.performance.hasPreload || d.performance.hasPreconnect) ? 'pass' : 'info') +
+                M('Image Dimensions', d.performance.totalImages > 0 ? `${d.performance.imageDimensionCoverage}% have width/height` : 'No images', d.performance.imageDimensionCoverage >= 80 ? 'pass' : 'warn') +
+                M('Lazy Loading', d.performance.totalImages > 0 ? `${d.performance.lazyImages}/${d.performance.totalImages} images` : 'No images', d.performance.lazyImages > 0 ? 'pass' : 'info') +
+                M('Favicon', d.favicon.exists ? 'Present' : 'Missing', d.favicon.exists ? 'pass' : 'warn') +
+                M('Web App Manifest', d.manifest.exists ? 'Present' : 'Missing', d.manifest.exists ? 'pass' : 'info') +
+                M('CSP Meta Tag', d.security.hasCSPMeta ? 'Present' : 'Not set', d.security.hasCSPMeta ? 'pass' : 'info');
+        }
+
+        function scoreClass(s) { return s >= 80 ? 'score-excellent' : s >= 60 ? 'score-good' : s >= 40 ? 'score-fair' : 'score-poor'; }
+        function scoreColor(s) { return s >= 80 ? '#059669' : s >= 60 ? '#2563eb' : s >= 40 ? '#d97706' : '#dc2626'; }
+
+        /* ====================================================================
+           PDF EXPORT — ENTERPRISE REPORT
+           ==================================================================== */
+        async function exportToPDF() {
+            if (!analysisResults) return;
+            const a = analysisResults;
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const W = pdf.internal.pageSize.getWidth();
+            const H = pdf.internal.pageSize.getHeight();
+            const m = 15; // margin
+            const cw = W - m * 2; // content width
+            let y = 0;
+            let pageNum = 1;
+
+            // Helpers
+            const pad = (n) => String(n).padStart(2, '0');
+            const addFooter = () => {
+                pdf.setFontSize(7);
+                pdf.setTextColor(140);
+                pdf.text(`Generated by SEO & GEO Analyzer Pro | Legacy AI / Floyd's Labs © 2026`, m, H - 8);
+                pdf.text(`Page ${pageNum}`, W - m, H - 8, { align: 'right' });
+            };
+            const checkPage = (need = 20) => {
+                if (y + need > H - 18) {
+                    addFooter();
+                    pdf.addPage();
+                    pageNum++;
+                    y = 18;
+                    return true;
+                }
+                return false;
+            };
+            const heading = (text, size = 14) => {
+                checkPage(20);
+                pdf.setFontSize(size);
+                pdf.setTextColor(30);
+                pdf.setFont(undefined, 'bold');
+                pdf.text(text, m, y);
+                y += size * 0.45 + 2;
+                pdf.setFont(undefined, 'normal');
+            };
+            const para = (text, indent = 0) => {
+                pdf.setFontSize(9);
+                pdf.setTextColor(80);
+                const lines = pdf.splitTextToSize(text, cw - indent);
+                lines.forEach(line => { checkPage(5); pdf.text(line, m + indent, y); y += 4; });
+                y += 2;
+            };
+            const metricLine = (label, value, status) => {
+                checkPage(6);
+                pdf.setFontSize(9);
+                const icon = status === 'pass' ? '✓' : status === 'fail' ? '✗' : status === 'warn' ? '⚠' : '•';
+                const colors = { pass: [5, 150, 105], fail: [220, 38, 38], warn: [217, 119, 6], info: [37, 99, 235] };
+                const c = colors[status] || colors.info;
+                pdf.setTextColor(60);
+                pdf.text(label, m + 3, y);
+                pdf.setTextColor(c[0], c[1], c[2]);
+                pdf.text(`${icon} ${value}`, m + cw * 0.55, y);
+                y += 5;
+            };
+
+            let domain = '';
+            try { domain = new URL(a.url).hostname.replace(/^www\./, ''); } catch {}
+
+            // ── COVER PAGE ──
+            y = 40;
+            pdf.setFontSize(28);
+            pdf.setTextColor(79, 70, 229);
+            pdf.setFont(undefined, 'bold');
+            pdf.text('SEO & GEO', m, y);
+            y += 12;
+            pdf.text('Analysis Report', m, y);
+            y += 20;
+
+            pdf.setFontSize(12);
+            pdf.setTextColor(80);
+            pdf.setFont(undefined, 'normal');
+            pdf.text(a.url, m, y);
+            y += 8;
+            pdf.setFontSize(10);
+            pdf.text(`Generated: ${new Date(a.timestamp).toLocaleString()}`, m, y);
+            y += 20;
+
+            // Overall score circle (text representation)
+            pdf.setFontSize(48);
+            const oc = a.scores.overall >= 80 ? [5, 150, 105] : a.scores.overall >= 60 ? [37, 99, 235] : a.scores.overall >= 40 ? [217, 119, 6] : [220, 38, 38];
+            pdf.setTextColor(oc[0], oc[1], oc[2]);
+            pdf.setFont(undefined, 'bold');
+            pdf.text(`${a.scores.overall}`, m, y);
+            pdf.setFontSize(16);
+            pdf.text('/100', m + 32, y);
+            y += 8;
+            pdf.setFontSize(11);
+            pdf.setTextColor(100);
+            pdf.setFont(undefined, 'normal');
+            pdf.text('Overall Score', m, y);
+            y += 15;
+
+            // Score table
+            const scoreOrder = ['onpage', 'geo', 'core', 'eeat', 'accessibility', 'social', 'technical'];
+            pdf.setFontSize(10);
+            scoreOrder.forEach(key => {
+                const meta = SECTION_META[key];
+                const score = a.scores[key];
+                const sc = score >= 80 ? [5, 150, 105] : score >= 60 ? [37, 99, 235] : score >= 40 ? [217, 119, 6] : [220, 38, 38];
+                pdf.setTextColor(60);
+                pdf.text(`${meta.title}:`, m, y);
+                pdf.setTextColor(sc[0], sc[1], sc[2]);
+                pdf.setFont(undefined, 'bold');
+                pdf.text(`${score}/100`, m + 60, y);
+                pdf.setFont(undefined, 'normal');
+                y += 6;
+            });
+
+            addFooter();
+            pdf.addPage();
+            pageNum++;
+            y = 18;
+
+            // ── EXECUTIVE SUMMARY ──
+            heading('Executive Summary', 16);
+
+            // Identify top strengths & weaknesses
+            const sorted = scoreOrder.map(k => ({ key: k, score: a.scores[k], title: SECTION_META[k].title })).sort((x, y) => y.score - x.score);
+            const strengths = sorted.filter(s => s.score >= 70).slice(0, 3);
+            const weaknesses = sorted.filter(s => s.score < 70).sort((x, y) => x.score - y.score).slice(0, 3);
+
+            para(`This report analyzes ${a.url} across seven dimensions of search engine optimization, AI engine optimization (GEO), content quality, authority signals, accessibility, social sharing readiness, and technical infrastructure. The overall score of ${a.scores.overall}/100 reflects the weighted average across all categories.`);
+
+            if (strengths.length > 0) {
+                heading('Top Strengths', 11);
+                strengths.forEach(s => para(`• ${s.title}: ${s.score}/100`, 3));
+            }
+            if (weaknesses.length > 0) {
+                heading('Areas for Improvement', 11);
+                weaknesses.forEach(s => para(`• ${s.title}: ${s.score}/100`, 3));
+            }
+
+            heading(`Action Items Summary`, 11);
+            const critCount = a.actionItems.filter(i => i.priority === 'critical').length;
+            const highCount = a.actionItems.filter(i => i.priority === 'high').length;
+            const medCount = a.actionItems.filter(i => i.priority === 'medium').length;
+            const lowCount = a.actionItems.filter(i => i.priority === 'low').length;
+            para(`Total: ${a.actionItems.length} recommendations — ${critCount} critical, ${highCount} high, ${medCount} medium, ${lowCount} low priority.`);
+
+            // ── SECTION-BY-SECTION DETAILS ──
+            const sectionRenderers = {
+                onpage: (a) => {
+                    const d = a.onpage;
+                    metricLine('Title Tag', d.title.exists ? `${d.title.length} chars` : 'Missing', d.title.exists ? (d.title.optimal ? 'pass' : 'warn') : 'fail');
+                    metricLine('Meta Description', d.metaDescription.exists ? `${d.metaDescription.length} chars` : 'Missing', d.metaDescription.exists ? (d.metaDescription.optimal ? 'pass' : 'warn') : 'fail');
+                    metricLine('H1 Tags', `${d.headings.h1.count} found`, d.headings.h1.count === 1 ? 'pass' : 'fail');
+                    metricLine('Heading Structure', d.headings.hasHierarchy ? 'Proper' : 'Needs work', d.headings.hasHierarchy ? 'pass' : 'warn');
+                    metricLine('Image Alt Coverage', `${d.images.altCoverage}%`, d.images.altCoverage >= 90 ? 'pass' : 'warn');
+                    metricLine('Image Dimensions', `${d.images.dimensionCoverage}% w/h`, d.images.dimensionCoverage >= 80 ? 'pass' : 'warn');
+                    metricLine('Internal Links', `${d.links.internal}`, d.links.internal > 0 ? 'pass' : 'warn');
+                    metricLine('External Links', `${d.links.external}`, d.links.external > 0 ? 'pass' : 'warn');
+                    metricLine('Anchor Text', `${d.links.descriptiveAnchorCoverage}% descriptive`, d.links.descriptiveAnchorCoverage >= 80 ? 'pass' : 'warn');
+                    metricLine('Canonical URL', d.canonical.exists ? 'Present' : 'Missing', d.canonical.exists ? 'pass' : 'warn');
+                    metricLine('Word Count', `${d.content.wordCount} (${d.content.rating})`, d.content.sufficient ? 'pass' : 'warn');
+                },
+                geo: (a) => {
+                    const d = a.geo;
+                    metricLine('Direct Answer', d.directAnswer.hasEarlyAnswer ? 'Present' : 'Missing', d.directAnswer.hasEarlyAnswer ? 'pass' : 'warn');
+                    metricLine('FAQ Schema', d.faqCoverage.hasFAQSchema ? 'Present' : 'Missing', d.faqCoverage.hasFAQSchema ? 'pass' : 'fail');
+                    metricLine('Questions Detected', `${d.faqCoverage.questionCount}`, d.faqCoverage.questionCount > 0 ? 'pass' : 'info');
+                    metricLine('Schema Markup', `${d.schemaMarkup.schemaCount} schemas`, d.schemaMarkup.schemaCount > 0 ? 'pass' : 'fail');
+                    metricLine('Statistics/Data', d.originalData.hasStatistics ? 'Found' : 'None', d.originalData.hasStatistics ? 'pass' : 'warn');
+                    metricLine('Key Takeaways', d.summaryBox.hasTakeaways ? 'Present' : 'Missing', d.summaryBox.hasTakeaways ? 'pass' : 'warn');
+                    metricLine('Pull Quotes', d.contentQuotability.hasPullQuotes ? `${d.contentQuotability.pullQuoteCount}` : 'None', d.contentQuotability.hasPullQuotes ? 'pass' : 'fail');
+                    metricLine('Quotable Paragraphs', `${d.contentQuotability.quotableParagraphs}`, d.contentQuotability.hasShortQuotableContent ? 'pass' : 'warn');
+                    metricLine('Long Paragraphs', `${d.contentQuotability.longParagraphs}`, d.contentQuotability.longParagraphs < 3 ? 'pass' : 'warn');
+                    metricLine('Expert Quotes', d.citationReadiness.hasExpertQuotes ? 'Found' : 'None', d.citationReadiness.hasExpertQuotes ? 'pass' : 'warn');
+                },
+                core: (a) => {
+                    metricLine('Contextual Clarity', `${a.core.contextualClarity.score}%`, a.core.contextualClarity.score >= 50 ? 'pass' : 'warn');
+                    metricLine('Introduction', a.core.contextualClarity.hasIntroduction ? 'Present' : 'Missing', a.core.contextualClarity.hasIntroduction ? 'pass' : 'fail');
+                    metricLine('Organization', `${a.core.organization.score}%`, a.core.organization.score >= 50 ? 'pass' : 'warn');
+                    metricLine('Table of Contents', a.core.organization.hasTOC ? 'Present' : 'Missing', a.core.organization.hasTOC ? 'pass' : 'fail');
+                    metricLine('Conclusion', a.core.organization.hasConclusion ? 'Present' : 'Missing', a.core.organization.hasConclusion ? 'pass' : 'fail');
+                    metricLine('Referenceability', `${a.core.referenceability.score}%`, a.core.referenceability.score >= 50 ? 'pass' : 'warn');
+                    metricLine('Citations', a.core.referenceability.hasCitations ? 'Found' : 'None', a.core.referenceability.hasCitations ? 'pass' : 'fail');
+                    metricLine('Exclusivity', `${a.core.exclusivity.score}%`, a.core.exclusivity.score >= 50 ? 'pass' : 'warn');
+                    metricLine('Case Studies', a.core.exclusivity.hasCaseStudies ? 'Found' : 'None', a.core.exclusivity.hasCaseStudies ? 'pass' : 'fail');
+                    metricLine('Expert Tips', a.core.exclusivity.hasExpertTips ? 'Found' : 'None', a.core.exclusivity.hasExpertTips ? 'pass' : 'fail');
+                },
+                eeat: (a) => {
+                    metricLine('Experience', `${a.eeat.experience.score}%`, a.eeat.experience.score >= 50 ? 'pass' : 'warn');
+                    metricLine('Practical Examples', a.eeat.experience.hasPracticalExamples ? 'Found' : 'None', a.eeat.experience.hasPracticalExamples ? 'pass' : 'fail');
+                    metricLine('Case Studies', a.eeat.experience.hasCaseStudies ? 'Found' : 'None', a.eeat.experience.hasCaseStudies ? 'pass' : 'fail');
+                    metricLine('Testimonials', a.eeat.experience.hasTestimonials ? 'Found' : 'None', a.eeat.experience.hasTestimonials ? 'pass' : 'fail');
+                    metricLine('Expertise', `${a.eeat.expertise.score}%`, a.eeat.expertise.score >= 50 ? 'pass' : 'warn');
+                    metricLine('Author Attribution', a.eeat.expertise.hasAuthorAttribution ? 'Found' : 'None', a.eeat.expertise.hasAuthorAttribution ? 'pass' : 'fail');
+                    metricLine('Authoritativeness', `${a.eeat.authoritativeness.score}%`, a.eeat.authoritativeness.score >= 50 ? 'pass' : 'warn');
+                    metricLine('Media Mentions', a.eeat.authoritativeness.hasMediaMentions ? 'Found' : 'None', a.eeat.authoritativeness.hasMediaMentions ? 'pass' : 'fail');
+                    metricLine('Awards', a.eeat.authoritativeness.hasAwards ? 'Found' : 'None', a.eeat.authoritativeness.hasAwards ? 'pass' : 'fail');
+                    metricLine('Trustworthiness', `${a.eeat.trust.score}%`, a.eeat.trust.score >= 50 ? 'pass' : 'warn');
+                    metricLine('Customer Reviews', a.eeat.trust.hasCustomerReviews ? 'Found' : 'None', a.eeat.trust.hasCustomerReviews ? 'pass' : 'warn');
+                },
+                accessibility: (a) => {
+                    const d = a.accessibility;
+                    metricLine('Language Attr', d.language.hasLang ? d.language.value : 'Missing', d.language.hasLang ? 'pass' : 'fail');
+                    metricLine('Skip Navigation', d.skipNav.exists ? 'Present' : 'Missing', d.skipNav.exists ? 'pass' : 'fail');
+                    metricLine('ARIA Landmarks', `${d.landmarks.count}/4`, d.landmarks.count >= 3 ? 'pass' : 'warn');
+                    metricLine('Image Alt Text', `${d.imageAlt.coverage}%`, d.imageAlt.coverage >= 90 ? 'pass' : 'warn');
+                    metricLine('Form Labels', `${d.formLabels.coverage}%`, d.formLabels.coverage >= 90 ? 'pass' : 'warn');
+                    metricLine('Semantic HTML', `${d.semanticHTML.count} elements`, d.semanticHTML.hasSemanticHTML ? 'pass' : 'warn');
+                },
+                social: (a) => {
+                    const d = a.social;
+                    metricLine('OG: title', d.openGraph.title ? 'Present' : 'Missing', d.openGraph.title ? 'pass' : 'fail');
+                    metricLine('OG: description', d.openGraph.description ? 'Present' : 'Missing', d.openGraph.description ? 'pass' : 'fail');
+                    metricLine('OG: image', d.openGraph.image ? 'Present' : 'Missing', d.openGraph.image ? 'pass' : 'fail');
+                    metricLine('OG: url', d.openGraph.url ? 'Present' : 'Missing', d.openGraph.url ? 'pass' : 'warn');
+                    metricLine('Twitter: card', d.twitterCard.card || 'Missing', d.twitterCard.card ? 'pass' : 'fail');
+                    metricLine('Twitter: title', d.twitterCard.title ? 'Present' : 'Missing', d.twitterCard.title ? 'pass' : 'fail');
+                    metricLine('Twitter: image', d.twitterCard.image ? 'Present' : 'Missing', d.twitterCard.image ? 'pass' : 'fail');
+                    metricLine('Overall Completeness', `${d.overallCompleteness}%`, d.overallCompleteness >= 80 ? 'pass' : 'warn');
+                },
+                technical: (a) => {
+                    const d = a.technical;
+                    metricLine('Viewport', d.mobile.hasViewport ? 'Present' : 'Missing', d.mobile.hasViewport ? 'pass' : 'fail');
+                    metricLine('Charset', d.encoding.hasCharset ? 'Present' : 'Missing', d.encoding.hasCharset ? 'pass' : 'fail');
+                    metricLine('Canonical', d.canonical.exists ? 'Present' : 'Missing', d.canonical.exists ? 'pass' : 'warn');
+                    metricLine('Structured Data', `${d.structuredData.count} schemas`, d.structuredData.count > 0 ? 'pass' : 'warn');
+                    metricLine('Script Optimization', `${d.scripts.percentage}%`, d.scripts.percentage >= 50 ? 'pass' : 'warn');
+                    metricLine('Image Dimensions', `${d.performance.imageDimensionCoverage}%`, d.performance.imageDimensionCoverage >= 80 ? 'pass' : 'warn');
+                    metricLine('Favicon', d.favicon.exists ? 'Present' : 'Missing', d.favicon.exists ? 'pass' : 'warn');
+                    metricLine('Resource Hints', (d.performance.hasPreload || d.performance.hasPreconnect) ? 'Present' : 'None', (d.performance.hasPreload || d.performance.hasPreconnect) ? 'pass' : 'info');
+                }
+            };
+
+            scoreOrder.forEach(key => {
+                checkPage(30);
+                const meta = SECTION_META[key];
+                heading(`${meta.title} — ${a.scores[key]}/100`, 13);
+                para(meta.desc);
+                if (sectionRenderers[key]) sectionRenderers[key](a);
+                y += 5;
+            });
+
+            // ── ACTION ITEMS ──
+            checkPage(30);
+            heading('Prioritized Action Items', 14);
+
+            const sortedActions = [...a.actionItems].sort((x, y) => ({ critical: 0, high: 1, medium: 2, low: 3 })[x.priority] - ({ critical: 0, high: 1, medium: 2, low: 3 })[y.priority]);
+            const prioColors = { critical: [220, 38, 38], high: [217, 119, 6], medium: [37, 99, 235], low: [5, 150, 105] };
+
+            sortedActions.forEach((item, i) => {
+                checkPage(18);
+                const pc = prioColors[item.priority];
+                pdf.setFontSize(8);
+                pdf.setTextColor(pc[0], pc[1], pc[2]);
+                pdf.text(`[${item.priority.toUpperCase()}]`, m, y);
+                pdf.setTextColor(140);
+                pdf.text(item.category, m + 22, y);
+                y += 4.5;
+                pdf.setFontSize(10);
+                pdf.setTextColor(30);
+                pdf.setFont(undefined, 'bold');
+                const actionLines = pdf.splitTextToSize(`${i + 1}. ${item.action}`, cw);
+                actionLines.forEach(line => { checkPage(5); pdf.text(line, m, y); y += 4.5; });
+                pdf.setFont(undefined, 'normal');
+                pdf.setFontSize(8);
+                pdf.setTextColor(80);
+                const instrLines = pdf.splitTextToSize(item.llmInstruction, cw - 5);
+                instrLines.forEach(line => { checkPage(4); pdf.text(line, m + 4, y); y += 3.5; });
+                y += 4;
+            });
+
+            addFooter();
+
+            // ── SAVE ──
+            const now = new Date();
+            const filename = `SEO-Report_${domain}_${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}.pdf`;
+            pdf.save(filename);
+            showToast(`Report exported: ${filename}`, 'success');
+        }
+
+        /* ====================================================================
+           CLIPBOARD
+           ==================================================================== */
+        function copyLLMPrompt() {
+            const text = $('#llm-prompt').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('LLM prompt copied to clipboard!', 'success');
+            }).catch(() => {
+                showToast('Failed to copy. Try selecting and copying manually.', 'error');
+            });
+        }
+
+        /* ====================================================================
+           EVENT LISTENERS
+           ==================================================================== */
+        function init() {
+            initTheme();
+
+            // Analyze button
+            $('#analyze-btn').addEventListener('click', analyzeWebsite);
+
+            // Enter key on input
+            $('#url-input').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') { e.preventDefault(); analyzeWebsite(); }
+            });
+
+            // Quick test URL buttons
+            $$('[data-url]').forEach(btn => {
+                btn.addEventListener('click', () => { $('#url-input').value = btn.dataset.url; });
+            });
+
+            // New analysis
+            $('#new-analysis-btn').addEventListener('click', () => {
+                $('#results-section').classList.add('hidden');
+                $('#input-section').classList.remove('hidden');
+                $('#url-input').focus();
+            });
+
+            // Export & copy buttons
+            $('#export-pdf-btn').addEventListener('click', exportToPDF);
+            $('#copy-prompt-btn').addEventListener('click', copyLLMPrompt);
+            $('#copy-prompt-btn-top').addEventListener('click', copyLLMPrompt);
+
+            // Retry
+            $('#retry-btn').addEventListener('click', () => {
+                $('#error-section').classList.add('hidden');
+                $('#input-section').classList.remove('hidden');
+                $('#url-input').focus();
+            });
+
+            // Theme toggle
+            $('#theme-toggle').addEventListener('click', toggleTheme);
+
+            // Shortcuts dialog
+            $('#shortcuts-btn').addEventListener('click', () => openDialog('shortcuts-dialog'));
+            $('#shortcuts-close').addEventListener('click', () => closeDialog('shortcuts-dialog'));
+            $('#shortcuts-dialog').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeDialog('shortcuts-dialog');
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                const active = document.activeElement;
+                const isInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
+
+                // Escape always closes dialogs
+                if (e.key === 'Escape') {
+                    closeDialog('shortcuts-dialog');
+                    return;
+                }
+
+                // Cmd/Ctrl shortcuts work everywhere
+                const mod = e.metaKey || e.ctrlKey;
+                if (mod && e.key === 'Enter') { e.preventDefault(); analyzeWebsite(); return; }
+                if (mod && e.shiftKey && (e.key === 'e' || e.key === 'E')) { e.preventDefault(); exportToPDF(); return; }
+                if (mod && e.shiftKey && (e.key === 'c' || e.key === 'C')) {
+                    if (!$('#results-section').classList.contains('hidden')) { e.preventDefault(); copyLLMPrompt(); }
+                    return;
+                }
+
+                // Single-key shortcuts only when not in input
+                if (isInput) return;
+                if (e.key === '?' || (e.shiftKey && e.key === '/')) { e.preventDefault(); openDialog('shortcuts-dialog'); }
+                if (e.key === 'd' || e.key === 'D') { e.preventDefault(); toggleTheme(); }
+                if (e.key === 'n' || e.key === 'N') {
+                    e.preventDefault();
+                    $('#results-section').classList.add('hidden');
+                    $('#error-section').classList.add('hidden');
+                    $('#input-section').classList.remove('hidden');
+                    $('#url-input').focus();
+                }
+            });
+        }
+
+        /* ====================================================================
+           PUBLIC API — window.SEOAnalyzerAPI
+           Enables LLMs and automation tools to control the analyzer
+           programmatically via browser console, Puppeteer, Playwright,
+           or any JavaScript execution context.
+           ==================================================================== */
+        window.SEOAnalyzerAPI = {
+
+            /** Returns API version and available methods */
+            info() {
+                return {
+                    name: 'SEO & GEO Analyzer Pro',
+                    version: '2.0.0',
+                    vendor: 'Legacy AI / Floyd\'s Labs',
+                    methods: [
+                        'analyze(url)',
+                        'getResults()',
+                        'getScores()',
+                        'getActionItems()',
+                        'getLLMPrompt()',
+                        'exportPDF()',
+                        'setTheme(theme)',
+                        'getTheme()',
+                        'isReady()'
+                    ]
+                };
+            },
+
+            /** Run a full analysis on a URL. Returns a Promise that resolves with the complete results object. */
+            async analyze(url) {
+                if (!url || typeof url !== 'string') throw new Error('SEOAnalyzerAPI.analyze() requires a URL string.');
+                document.getElementById('url-input').value = url;
+                await analyzeWebsite();
+                return this.getResults();
+            },
+
+            /** Returns the full analysis results object from the last analysis, or null if none. */
+            getResults() {
+                return analysisResults ? JSON.parse(JSON.stringify(analysisResults)) : null;
+            },
+
+            /** Returns just the scores object { overall, onpage, geo, core, eeat, accessibility, social, technical }. */
+            getScores() {
+                return analysisResults ? { ...analysisResults.scores } : null;
+            },
+
+            /** Returns the action items array from the last analysis. */
+            getActionItems() {
+                return analysisResults ? [...analysisResults.actionItems] : null;
+            },
+
+            /** Returns the generated LLM prompt text. */
+            getLLMPrompt() {
+                return analysisResults ? analysisResults.llmPrompt : null;
+            },
+
+            /** Triggers PDF export. Returns the filename that was generated. */
+            async exportPDF() {
+                if (!analysisResults) throw new Error('No analysis results. Run analyze(url) first.');
+                await exportToPDF();
+                const pad = (n) => String(n).padStart(2, '0');
+                let domain = ''; try { domain = new URL(analysisResults.url).hostname.replace(/^www\./, ''); } catch {}
+                const now = new Date();
+                return `SEO-Report_${domain}_${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}.pdf`;
+            },
+
+            /** Set theme to 'light' or 'dark'. */
+            setTheme(theme) {
+                if (theme !== 'light' && theme !== 'dark') throw new Error('Theme must be "light" or "dark".');
+                setTheme(theme);
+                localStorage.setItem('seo-analyzer-theme', theme);
+            },
+
+            /** Get the current theme. */
+            getTheme() {
+                return document.documentElement.dataset.theme || 'light';
+            },
+
+            /** Returns true if the tool has finished initializing. */
+            isReady() {
+                return !!document.getElementById('analyze-btn');
+            },
+
+            /** Batch-analyze multiple URLs. Returns an array of results. */
+            async batchAnalyze(urls) {
+                if (!Array.isArray(urls)) throw new Error('batchAnalyze() requires an array of URL strings.');
+                const results = [];
+                for (const url of urls) {
+                    try {
+                        const result = await this.analyze(url);
+                        results.push({ url, success: true, data: result });
+                    } catch (e) {
+                        results.push({ url, success: false, error: e.message });
+                    }
+                }
+                return results;
+            },
+
+            /** Returns a compact summary suitable for LLM consumption. */
+            getSummary() {
+                if (!analysisResults) return null;
+                const a = analysisResults;
+                return {
+                    url: a.url,
+                    analyzedAt: a.timestamp,
+                    scores: a.scores,
+                    totalIssues: a.actionItems.length,
+                    criticalIssues: a.actionItems.filter(i => i.priority === 'critical').length,
+                    highIssues: a.actionItems.filter(i => i.priority === 'high').length,
+                    topActions: a.actionItems.slice(0, 5).map(i => `[${i.priority.toUpperCase()}] ${i.action}`),
+                    strengths: Object.entries(a.scores)
+                        .filter(([k, v]) => k !== 'overall' && v >= 80)
+                        .map(([k, v]) => `${k}: ${v}/100`),
+                    weaknesses: Object.entries(a.scores)
+                        .filter(([k, v]) => k !== 'overall' && v < 60)
+                        .map(([k, v]) => `${k}: ${v}/100`)
+                };
+            }
+        };
+
+        // Boot
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+
+    })();
+    </script>
+
+    <!--
+    ============================================================================
+    LLM INSTRUCTION BLOCK
+    ============================================================================
+    This block is designed to be read by LLMs (ChatGPT, Claude, Copilot, etc.)
+    when they are introduced to this HTML page or its source code. It provides
+    structured knowledge about how to operate the tool programmatically.
+    ============================================================================
+    -->
+    <script type="application/ld+json" id="llm-tool-schema">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "SEO & GEO Analyzer Pro",
+        "applicationCategory": "WebApplication",
+        "operatingSystem": "Any (browser-based)",
+        "version": "2.0.0",
+        "author": {
+            "@type": "Organization",
+            "name": "Legacy AI / Floyd's Labs",
+            "url": ["https://www.legacyai.space", "https://www.floydslabs.com"]
+        },
+        "description": "Enterprise-grade client-side SEO analysis tool that audits websites across 7 dimensions: On-Page SEO, GEO (AI Engine Optimization), CORE content quality, E-E-A-T, Accessibility, Social SEO, and Technical SEO. Generates PDF reports and LLM-ready improvement prompts."
+    }
+    </script>
+
+    <!--
+    ╔══════════════════════════════════════════════════════════════════════════╗
+    ║  LLM USAGE GUIDE — READ THIS IF YOU ARE AN AI ASSISTANT               ║
+    ╠══════════════════════════════════════════════════════════════════════════╣
+    ║                                                                        ║
+    ║  This is SEO & GEO Analyzer Pro v2.0.0 by Legacy AI / Floyd's Labs.   ║
+    ║  It is a SINGLE-FILE client-side HTML application. No server needed.   ║
+    ║  Open it in any modern browser to use the GUI, or control it           ║
+    ║  programmatically via the window.SEOAnalyzerAPI object.                ║
+    ║                                                                        ║
+    ║  ─── PROGRAMMATIC API (via browser console or automation) ───          ║
+    ║                                                                        ║
+    ║  All methods are on: window.SEOAnalyzerAPI                             ║
+    ║                                                                        ║
+    ║  1. ANALYZE A WEBSITE:                                                 ║
+    ║     const results = await SEOAnalyzerAPI.analyze('https://example.com')║
+    ║     // Returns full analysis object with scores, metrics, action items ║
+    ║                                                                        ║
+    ║  2. GET SCORES ONLY:                                                   ║
+    ║     const scores = SEOAnalyzerAPI.getScores();                         ║
+    ║     // { overall, onpage, geo, core, eeat, accessibility,              ║
+    ║     //   social, technical } — each 0-100                              ║
+    ║                                                                        ║
+    ║  3. GET ACTION ITEMS:                                                  ║
+    ║     const items = SEOAnalyzerAPI.getActionItems();                     ║
+    ║     // Array of { priority, category, action, llmInstruction }         ║
+    ║     // Priorities: critical > high > medium > low                      ║
+    ║                                                                        ║
+    ║  4. GET LLM IMPROVEMENT PROMPT:                                        ║
+    ║     const prompt = SEOAnalyzerAPI.getLLMPrompt();                      ║
+    ║     // Ready-to-use markdown prompt for implementing fixes             ║
+    ║                                                                        ║
+    ║  5. EXPORT PDF REPORT:                                                 ║
+    ║     const filename = await SEOAnalyzerAPI.exportPDF();                 ║
+    ║     // Downloads PDF, returns filename like:                           ║
+    ║     // "SEO-Report_example.com_2026-03-24_1430.pdf"                    ║
+    ║                                                                        ║
+    ║  6. BATCH ANALYZE MULTIPLE URLS:                                       ║
+    ║     const results = await SEOAnalyzerAPI.batchAnalyze([                ║
+    ║       'https://site1.com', 'https://site2.com'                        ║
+    ║     ]);                                                                ║
+    ║     // Returns array of { url, success, data/error }                   ║
+    ║                                                                        ║
+    ║  7. GET COMPACT SUMMARY:                                               ║
+    ║     const summary = SEOAnalyzerAPI.getSummary();                       ║
+    ║     // { url, scores, totalIssues, criticalIssues, topActions,         ║
+    ║     //   strengths, weaknesses }                                       ║
+    ║                                                                        ║
+    ║  8. THEME CONTROL:                                                     ║
+    ║     SEOAnalyzerAPI.setTheme('dark');  // or 'light'                    ║
+    ║     SEOAnalyzerAPI.getTheme();        // returns current theme         ║
+    ║                                                                        ║
+    ║  9. CHECK READINESS:                                                   ║
+    ║     SEOAnalyzerAPI.isReady();  // true when DOM is initialized         ║
+    ║                                                                        ║
+    ║  ─── ANALYSIS DIMENSIONS (7 categories, each scored 0-100) ───        ║
+    ║                                                                        ║
+    ║  • On-Page SEO: title, meta desc, headings, images, links, canonical  ║
+    ║  • GEO: direct answers, FAQ, schema, data tables, stats, takeaways    ║
+    ║  • CORE: clarity, organization, referenceability, exclusivity          ║
+    ║  • E-E-A-T: experience, expertise, authoritativeness, trust           ║
+    ║  • Accessibility: lang, skip-nav, landmarks, alt text, ARIA, semantic ║
+    ║  • Social SEO: Open Graph (6 tags), Twitter Cards (6 tags)            ║
+    ║  • Technical: viewport, charset, canonical, robots, hreflang, schema, ║
+    ║    performance hints, script optimization, favicon, manifest, CSP      ║
+    ║                                                                        ║
+    ║  ─── WORKFLOW FOR LLM-ASSISTED SEO IMPROVEMENT ───                    ║
+    ║                                                                        ║
+    ║  Step 1: Run analysis                                                  ║
+    ║    const r = await SEOAnalyzerAPI.analyze('https://target-site.com');  ║
+    ║                                                                        ║
+    ║  Step 2: Review scores and identify weak areas                         ║
+    ║    const s = SEOAnalyzerAPI.getSummary();                              ║
+    ║    // Focus on s.weaknesses and s.criticalIssues                       ║
+    ║                                                                        ║
+    ║  Step 3: Get the improvement prompt                                    ║
+    ║    const prompt = SEOAnalyzerAPI.getLLMPrompt();                       ║
+    ║    // This prompt contains all actionable fixes with instructions      ║
+    ║                                                                        ║
+    ║  Step 4: Implement the fixes using the prompt as your guide            ║
+    ║                                                                        ║
+    ║  Step 5: Re-analyze to verify improvement                              ║
+    ║    const after = await SEOAnalyzerAPI.analyze('https://target-site.com')║
+    ║    // Compare before/after scores                                      ║
+    ║                                                                        ║
+    ║  Step 6: Export final report                                           ║
+    ║    await SEOAnalyzerAPI.exportPDF();                                   ║
+    ║                                                                        ║
+    ║  ─── NOTES ───                                                         ║
+    ║                                                                        ║
+    ║  • This tool runs entirely client-side. It uses CORS proxies to fetch  ║
+    ║    external websites. Some sites may block CORS requests.              ║
+    ║  • The PDF report filename includes the domain and timestamp:          ║
+    ║    SEO-Report_{domain}_{YYYY-MM-DD}_{HHmm}.pdf                        ║
+    ║  • The tool supports dark/light mode with system preference detection. ║
+    ║  • Keyboard shortcuts: Cmd+Enter (analyze), D (theme), ? (shortcuts). ║
+    ║  • All analysis is heuristic-based on HTML content. It cannot detect   ║
+    ║    server-side configurations (robots.txt file, HTTP headers, etc).    ║
+    ║                                                                        ║
+    ╚══════════════════════════════════════════════════════════════════════════╝
+    -->
+</body>
+</html>

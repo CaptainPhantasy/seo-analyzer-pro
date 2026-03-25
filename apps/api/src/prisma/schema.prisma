@@ -1,0 +1,207 @@
+/**
+ * SEO Analyzer Pro - Enterprise SEO & GEO Analysis Platform
+ * Copyright (c) 2026 Legacy AI / Floyd's Labs
+ * www.LegacyAI.space | www.FloydsLabs.com
+ */
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model - represents authenticated users
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  role         UserRole @default(MEMBER)
+  orgId        String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  apiKeys      ApiKey[]
+  auditLogs    AuditLog[]
+
+  @@index([email])
+  @@index([orgId])
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+// Organization model - represents tenant organizations
+model Organization {
+  id              String           @id @default(cuid())
+  name            String
+  plan            Plan             @default(FREE)
+  stripeCustomerId String?         @unique
+  settings        Json?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  users        User[]
+  sites        Site[]
+  integrations Integration[]
+  auditLogs    AuditLog[]
+
+  @@index([stripeCustomerId])
+}
+
+enum Plan {
+  FREE
+  STARTER
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+// Site model - represents websites being analyzed
+model Site {
+  id        String   @id @default(cuid())
+  orgId     String
+  url       String
+  name      String
+  settings  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization   Organization     @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  scans          Scan[]
+  scheduledScans ScheduledScan[]
+  competitors    Competitor[]
+
+  @@unique([orgId, url])
+  @@index([orgId])
+}
+
+// Scan model - represents individual SEO analysis scans
+model Scan {
+  id           String     @id @default(cuid())
+  siteId       String
+  status       ScanStatus @default(PENDING)
+  scores       Json?
+  metrics      Json?
+  actionItems  Json?
+  errorMessage String?
+  startedAt    DateTime?
+  completedAt  DateTime?
+  createdAt    DateTime   @default(now())
+
+  site Site @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([siteId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum ScanStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+// ScheduledScan model - represents recurring scan configurations
+model ScheduledScan {
+  id       String           @id @default(cuid())
+  siteId   String
+  frequency ScanFrequency
+  nextRun  DateTime
+  enabled  Boolean          @default(true)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  site Site @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([siteId])
+  @@index([nextRun])
+}
+
+enum ScanFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+// Competitor model - represents competitor sites for comparison
+model Competitor {
+  id         String   @id @default(cuid())
+  siteId     String
+  url        String
+  lastScanId String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  site Site @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@unique([siteId, url])
+  @@index([siteId])
+}
+
+// Integration model - represents third-party integrations
+model Integration {
+  id        String          @id @default(cuid())
+  orgId     String
+  type      IntegrationType
+  config    Json?
+  enabled   Boolean         @default(true)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@unique([orgId, type])
+  @@index([orgId])
+}
+
+enum IntegrationType {
+  GOOGLE_SEARCH_CONSOLE
+  GOOGLE_ANALYTICS
+  SLACK
+  WEBHOOK
+  ZAPIER
+}
+
+// ApiKey model - represents API keys for programmatic access
+model ApiKey {
+  id          String   @id @default(cuid())
+  userId      String
+  key         String   @unique
+  name        String
+  permissions Json?
+  lastUsed    DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([key])
+}
+
+// AuditLog model - represents audit trail entries
+model AuditLog {
+  id        String   @id @default(cuid())
+  orgId     String
+  userId    String?
+  action    String
+  details   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  user         User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([orgId])
+  @@index([userId])
+  @@index([createdAt])
+}
