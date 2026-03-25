@@ -23,7 +23,6 @@ import {
   ShieldCheck,
   Bot,
   Target,
-  ChevronRight,
   ExternalLink,
   Activity,
 } from 'lucide-react';
@@ -245,7 +244,7 @@ export default function Home() {
     let pageNum = 1;
 
     // ── Helpers ────────────────────────────────────────────────────────────────
-    const rgb = (c: [number,number,number]) => ({ r: c[0], g: c[1], b: c[2] });
+    const _rgb = (c: [number,number,number]) => ({ r: c[0], g: c[1], b: c[2] });
 
     const setFill = (c: [number,number,number]) => doc.setFillColor(c[0], c[1], c[2]);
     const setDraw = (c: [number,number,number]) => doc.setDrawColor(c[0], c[1], c[2]);
