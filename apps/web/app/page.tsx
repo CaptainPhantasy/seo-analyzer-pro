@@ -298,7 +298,24 @@ export default function Home() {
       doc.setFontSize(6.5);
       doc.setFont('helvetica', 'normal');
       setTxt([160, 160, 160]);
-      doc.text("Legacy AI / Floyd's Labs  ·  www.LegacyAI.space  ·  www.FloydsLabs.com", ML, PH - 3.5);
+      // Left side: brand name + clickable URLs
+      doc.text("Legacy AI / Floyd's Labs  ·  ", ML, PH - 3.5);
+      // Measure prefix width to position links correctly
+      const prefixW = doc.getTextWidth("Legacy AI / Floyd's Labs  ·  ");
+      setTxt([100, 160, 255]);
+      doc.text('www.LegacyAI.space', ML + prefixW, PH - 3.5);
+      const spaceW = doc.getTextWidth('www.LegacyAI.space');
+      setTxt([160, 160, 160]);
+      doc.text('  ·  ', ML + prefixW + spaceW, PH - 3.5);
+      const dotW = doc.getTextWidth('  ·  ');
+      setTxt([100, 160, 255]);
+      doc.text('www.FloydsLabs.com', ML + prefixW + spaceW + dotW, PH - 3.5);
+      const floydW = doc.getTextWidth('www.FloydsLabs.com');
+      // Invisible clickable link rectangles (x, y, w, h) — y is top of click zone
+      doc.link(ML + prefixW, PH - FOOTER_H, spaceW, FOOTER_H, { url: 'https://www.legacyai.space' });
+      doc.link(ML + prefixW + spaceW + dotW, PH - FOOTER_H, floydW, FOOTER_H, { url: 'https://www.floydslabs.com' });
+      // Right side: copyright
+      setTxt([160, 160, 160]);
       doc.text(`© 2026 Legacy AI / Floyd's Labs. Confidential.`, PW - MR, PH - 3.5, { align: 'right' });
     };
 
