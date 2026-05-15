@@ -1,6 +1,6 @@
 {
   "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm --filter @seo-analyzer/web build",
+  "buildCommand": "pnpm --filter @seo-analyzer-pro/types build && pnpm --filter @seo-analyzer-pro/analyzer-core build && pnpm --filter @seo-analyzer/web build",
   "outputDirectory": ".next",
   "framework": "nextjs"
 }
